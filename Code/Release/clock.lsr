@@ -1,0 +1,988 @@
+STMicroelectronics assembler v4.52   (C)1987-2019   Wed Jun 19 15:36:16 2019
+Page 1  Assembler
+                                               e:\stm8s\elevator\driver\clock.asm
+
+   1                         stm8/     
+   2                         
+   0  000000                                 #include "STM8S105K4.inc"
+   1                         ; STM8S105K4.inc
+   2  000000 U                               #IFDEF   __INCLUDE_STM8S105K4_
+   4  000000                                 #define  __INCLUDE_STM8S105K4_ 1
+   0  000000                                 #include "STM8S105K.inc"
+   1                         ; STM8S105K.inc
+   2                         
+   3                         ; Copyright (c) 2003-2012 STMicroelectronics
+   4                         
+   5  000000 U                               #ifdef   __STM8S105K__
+   8  000000                                 #define  __STM8S105K__ 1
+   9                         
+  10                         ; STM8S105K
+  11                         
+  12                         
+  13                         ; Port A
+  14                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+  15                         
+  16  000000                                 EXTERN   PA_ODR.w      ; Port A data output latch 
+                                                                ;register
+  17                         
+  18  000000                                 EXTERN   PA_IDR.w      ; Port A input pin value 
+                                                                ;register
+  19                         
+  20  000000                                 EXTERN   PA_DDR.w      ; Port A data direction 
+                                                                ;register
+  21                         
+  22  000000                                 EXTERN   PA_CR1.w      ; Port A control register 1
+  23                         
+  24  000000                                 EXTERN   PA_CR2.w      ; Port A control register 2
+  25                         
+  26                         ; Port B
+  27                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+  28                         
+  29  000000                                 EXTERN   PB_ODR.w      ; Port B data output latch 
+                                                                ;register
+  30                         
+  31  000000                                 EXTERN   PB_IDR.w      ; Port B input pin value 
+                                                                ;register
+  32                         
+  33  000000                                 EXTERN   PB_DDR.w      ; Port B data direction 
+                                                                ;register
+  34                         
+  35  000000                                 EXTERN   PB_CR1.w      ; Port B control register 1
+  36                         
+  37  000000                                 EXTERN   PB_CR2.w      ; Port B control register 2
+  38                         
+  39                         ; Port C
+  40                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+  41                         
+  42  000000                                 EXTERN   PC_ODR.w      ; Port C data output latch 
+                                                                ;register
+STMicroelectronics assembler v4.52   (C)1987-2019   Wed Jun 19 15:36:16 2019
+Page 2  Assembler
+                                               e:\stm8s\elevator\driver\clock.asm
+
+  43                         
+  44  000000                                 EXTERN   PC_IDR.w      ; Port C input pin value 
+                                                                ;register
+  45                         
+  46  000000                                 EXTERN   PC_DDR.w      ; Port C data direction 
+                                                                ;register
+  47                         
+  48  000000                                 EXTERN   PC_CR1.w      ; Port C control register 1
+  49                         
+  50  000000                                 EXTERN   PC_CR2.w      ; Port C control register 2
+  51                         
+  52                         ; Port D
+  53                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+  54                         
+  55  000000                                 EXTERN   PD_ODR.w      ; Port D data output latch 
+                                                                ;register
+  56                         
+  57  000000                                 EXTERN   PD_IDR.w      ; Port D input pin value 
+                                                                ;register
+  58                         
+  59  000000                                 EXTERN   PD_DDR.w      ; Port D data direction 
+                                                                ;register
+  60                         
+  61  000000                                 EXTERN   PD_CR1.w      ; Port D control register 1
+  62                         
+  63  000000                                 EXTERN   PD_CR2.w      ; Port D control register 2
+  64                         
+  65                         ; Port E
+  66                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+  67                         
+  68  000000                                 EXTERN   PE_ODR.w      ; Port E data output latch 
+                                                                ;register
+  69                         
+  70  000000                                 EXTERN   PE_IDR.w      ; Port E input pin value 
+                                                                ;register
+  71                         
+  72  000000                                 EXTERN   PE_DDR.w      ; Port E data direction 
+                                                                ;register
+  73                         
+  74  000000                                 EXTERN   PE_CR1.w      ; Port E control register 1
+  75                         
+  76  000000                                 EXTERN   PE_CR2.w      ; Port E control register 2
+  77                         
+  78                         ; Port F
+  79                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+  80                         
+  81  000000                                 EXTERN   PF_ODR.w      ; Port F data output latch 
+                                                                ;register
+  82                         
+  83  000000                                 EXTERN   PF_IDR.w      ; Port F input pin value 
+                                                                ;register
+  84                         
+  85  000000                                 EXTERN   PF_DDR.w      ; Port F data direction 
+                                                                ;register
+STMicroelectronics assembler v4.52   (C)1987-2019   Wed Jun 19 15:36:16 2019
+Page 3  Assembler
+                                               e:\stm8s\elevator\driver\clock.asm
+
+  86                         
+  87  000000                                 EXTERN   PF_CR1.w      ; Port F control register 1
+  88                         
+  89  000000                                 EXTERN   PF_CR2.w      ; Port F control register 2
+  90                         
+  91                         ; Flash
+  92                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+  93                         
+  94  000000                                 EXTERN   FLASH_CR1.w   ; Flash control register 1
+  95                         
+  96  000000                                 EXTERN   FLASH_CR2.w   ; Flash control register 2
+  97                         
+  98  000000                                 EXTERN   FLASH_NCR2.w  ; Flash complementary control 
+                                                                ;register 2
+  99                         
+ 100  000000                                 EXTERN   FLASH_FPR.w   ; Flash protection register
+ 101                         
+ 102  000000                                 EXTERN   FLASH_NFPR.w  ; Flash complementary protection
+                                                                ; register
+ 103                         
+ 104  000000                                 EXTERN   FLASH_IAPSR.w  ; Flash in-application 
+                                                                ;programming status register
+ 105                         
+ 106  000000                                 EXTERN   FLASH_PUKR.w  ; Flash Program memory 
+                                                                ;unprotection register
+ 107                         
+ 108  000000                                 EXTERN   FLASH_DUKR.w  ; Data EEPROM unprotection 
+                                                                ;register
+ 109                         
+ 110                         ; External Interrupt Control Register (ITC)
+ 111                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 112                         
+ 113  000000                                 EXTERN   EXTI_CR1.w    ; External interrupt control 
+                                                                ;register 1
+ 114                         
+ 115  000000                                 EXTERN   EXTI_CR2.w    ; External interrupt control 
+                                                                ;register 2
+ 116                         
+ 117                         ; Reset (RST)
+ 118                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 119                         
+ 120  000000                                 EXTERN   RST_SR.w      ; Reset status register 1
+ 121                         
+ 122                         ; Clock Control (CLK)
+ 123                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 124                         
+ 125  000000                                 EXTERN   CLK_ICKR.w    ; Internal clock control 
+                                                                ;register
+ 126                         
+ 127  000000                                 EXTERN   CLK_ECKR.w    ; External clock control 
+                                                                ;register
+ 128                         
+ 129  000000                                 EXTERN   CLK_CMSR.w    ; Clock master status register
+STMicroelectronics assembler v4.52   (C)1987-2019   Wed Jun 19 15:36:16 2019
+Page 4  Assembler
+                                               e:\stm8s\elevator\driver\clock.asm
+
+ 130                         
+ 131  000000                                 EXTERN   CLK_SWR.w     ; Clock master switch register
+ 132                         
+ 133  000000                                 EXTERN   CLK_SWCR.w    ; Clock switch control register
+ 134                         
+ 135  000000                                 EXTERN   CLK_CKDIVR.w  ; Clock divider register
+ 136                         
+ 137  000000                                 EXTERN   CLK_PCKENR1.w  ; Peripheral clock gating 
+                                                                ;register 1
+ 138                         
+ 139  000000                                 EXTERN   CLK_CSSR.w    ; Clock security system 
+                                                                ;register
+ 140                         
+ 141  000000                                 EXTERN   CLK_CCOR.w    ; Configurable clock control 
+                                                                ;register
+ 142                         
+ 143  000000                                 EXTERN   CLK_PCKENR2.w  ; Peripheral clock gating 
+                                                                ;register 2
+ 144                         
+ 145  000000                                 EXTERN   CLK_CANCCR.w  ; CAN clock control register
+ 146                         
+ 147  000000                                 EXTERN   CLK_HSITRIMR.w  ; HSI clock calibration trimming
+                                                                ; register
+ 148                         
+ 149  000000                                 EXTERN   CLK_SWIMCCR.w  ; SWIM clock control register
+ 150                         
+ 151                         ; Window Watchdog (WWDG)
+ 152                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 153                         
+ 154  000000                                 EXTERN   WWDG_CR.w     ; WWDG Control Register
+ 155                         
+ 156  000000                                 EXTERN   WWDG_WR.w     ; WWDR Window Register
+ 157                         
+ 158                         ; Independent Watchdog (IWDG)
+ 159                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 160                         
+ 161  000000                                 EXTERN   IWDG_KR.w     ; IWDG Key Register
+ 162                         
+ 163  000000                                 EXTERN   IWDG_PR.w     ; IWDG Prescaler Register
+ 164                         
+ 165  000000                                 EXTERN   IWDG_RLR.w    ; IWDG Reload Register
+ 166                         
+ 167                         ; Auto Wake-Up (AWU)
+ 168                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 169                         
+ 170  000000                                 EXTERN   AWU_CSR.w     ; AWU Control/Status Register
+ 171                         
+ 172  000000                                 EXTERN   AWU_APR.w     ; AWU asynchronous prescaler 
+                                                                ;buffer register
+ 173                         
+ 174  000000                                 EXTERN   AWU_TBR.w     ; AWU Timebase selection 
+                                                                ;register
+ 175                         
+ 176                         ; Beeper (BEEP)
+STMicroelectronics assembler v4.52   (C)1987-2019   Wed Jun 19 15:36:16 2019
+Page 5  Assembler
+                                               e:\stm8s\elevator\driver\clock.asm
+
+ 177                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 178                         
+ 179  000000                                 EXTERN   BEEP_CSR.w    ; BEEP Control/Status Register
+ 180                         
+ 181                         ; Serial Peripheral Interface (SPI)
+ 182                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 183                         
+ 184  000000                                 EXTERN   SPI_CR1.w     ; SPI Control Register 1
+ 185                         
+ 186  000000                                 EXTERN   SPI_CR2.w     ; SPI Control Register 2
+ 187                         
+ 188  000000                                 EXTERN   SPI_ICR.w     ; SPI Interrupt Control 
+                                                                ;Register
+ 189                         
+ 190  000000                                 EXTERN   SPI_SR.w      ; SPI Status Register
+ 191                         
+ 192  000000                                 EXTERN   SPI_DR.w      ; SPI Data Register
+ 193                         
+ 194  000000                                 EXTERN   SPI_CRCPR.w   ; SPI CRC Polynomial Register
+ 195                         
+ 196  000000                                 EXTERN   SPI_RXCRCR.w  ; SPI Rx CRC Register
+ 197                         
+ 198  000000                                 EXTERN   SPI_TXCRCR.w  ; SPI Tx CRC Register
+ 199                         
+ 200                         ; I2C Bus Interface (I2C)
+ 201                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 202                         
+ 203  000000                                 EXTERN   I2C_CR1.w     ; I2C control register 1
+ 204                         
+ 205  000000                                 EXTERN   I2C_CR2.w     ; I2C control register 2
+ 206                         
+ 207  000000                                 EXTERN   I2C_FREQR.w   ; I2C frequency register
+ 208                         
+ 209  000000                                 EXTERN   I2C_OARL.w    ; I2C Own address register low
+ 210                         
+ 211  000000                                 EXTERN   I2C_OARH.w    ; I2C Own address register high
+ 212                         
+ 213  000000                                 EXTERN   I2C_DR.w      ; I2C data register
+ 214                         
+ 215  000000                                 EXTERN   I2C_SR1.w     ; I2C status register 1
+ 216                         
+ 217  000000                                 EXTERN   I2C_SR2.w     ; I2C status register 2
+ 218                         
+ 219  000000                                 EXTERN   I2C_SR3.w     ; I2C status register 3
+ 220                         
+ 221  000000                                 EXTERN   I2C_ITR.w     ; I2C interrupt control 
+                                                                ;register
+ 222                         
+ 223  000000                                 EXTERN   I2C_CCRL.w    ; I2C Clock control register 
+                                                                ;low
+ 224                         
+ 225  000000                                 EXTERN   I2C_CCRH.w    ; I2C Clock control register 
+                                                                ;high
+ 226                         
+STMicroelectronics assembler v4.52   (C)1987-2019   Wed Jun 19 15:36:16 2019
+Page 6  Assembler
+                                               e:\stm8s\elevator\driver\clock.asm
+
+ 227  000000                                 EXTERN   I2C_TRISER.w  ; I2C TRISE register
+ 228                         
+ 229  000000                                 EXTERN   I2C_PECR.w    ; I2C packet error checking 
+                                                                ;register
+ 230                         
+ 231                         ; LIN Universal asynch. receiver transmitter (UART2)
+ 232                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 233                         
+ 234  000000                                 EXTERN   UART2_SR.w    ; UART2 Status Register
+ 235                         
+ 236  000000                                 EXTERN   UART2_DR.w    ; UART2 Data Register
+ 237                         
+ 238  000000                                 EXTERN   UART2_BRR1.w  ; UART2 Baud Rate Register 1
+ 239                         
+ 240  000000                                 EXTERN   UART2_BRR2.w  ; UART2 Baud Rate Register 2
+ 241                         
+ 242  000000                                 EXTERN   UART2_CR1.w   ; UART2 Control Register 1
+ 243                         
+ 244  000000                                 EXTERN   UART2_CR2.w   ; UART2 Control Register 2
+ 245                         
+ 246  000000                                 EXTERN   UART2_CR3.w   ; UART2 Control Register 3
+ 247                         
+ 248  000000                                 EXTERN   UART2_CR4.w   ; UART2 Control Register 4
+ 249                         
+ 250  000000                                 EXTERN   UART2_CR5.w   ; UART2 Control Register 5
+ 251                         
+ 252  000000                                 EXTERN   UART2_CR6.w   ; UART2 Control Register 6
+ 253                         
+ 254  000000                                 EXTERN   UART2_GTR.w   ; UART2 Guard time Register
+ 255                         
+ 256  000000                                 EXTERN   UART2_PSCR.w  ; UART2 Prescaler Register
+ 257                         
+ 258                         ; 16-Bit Timer 1 (TIM1)
+ 259                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 260                         
+ 261  000000                                 EXTERN   TIM1_CR1.w    ; TIM1 Control register 1
+ 262                         
+ 263  000000                                 EXTERN   TIM1_CR2.w    ; TIM1 Control register 2
+ 264                         
+ 265  000000                                 EXTERN   TIM1_SMCR.w   ; TIM1 Slave Mode Control 
+                                                                ;register
+ 266                         
+ 267  000000                                 EXTERN   TIM1_ETR.w    ; TIM1 external trigger 
+                                                                ;register
+ 268                         
+ 269  000000                                 EXTERN   TIM1_IER.w    ; TIM1 Interrupt enable 
+                                                                ;register
+ 270                         
+ 271  000000                                 EXTERN   TIM1_SR1.w    ; TIM1 Status register 1
+ 272                         
+ 273  000000                                 EXTERN   TIM1_SR2.w    ; TIM1 Status register 2
+ 274                         
+ 275  000000                                 EXTERN   TIM1_EGR.w    ; TIM1 Event Generation 
+                                                                ;register
+ 276                         
+STMicroelectronics assembler v4.52   (C)1987-2019   Wed Jun 19 15:36:16 2019
+Page 7  Assembler
+                                               e:\stm8s\elevator\driver\clock.asm
+
+ 277  000000                                 EXTERN   TIM1_CCMR1.w  ; TIM1 Capture/Compare mode 
+                                                                ;register 1
+ 278                         
+ 279  000000                                 EXTERN   TIM1_CCMR2.w  ; TIM1 Capture/Compare mode 
+                                                                ;register 2
+ 280                         
+ 281  000000                                 EXTERN   TIM1_CCMR3.w  ; TIM1 Capture/Compare mode 
+                                                                ;register 3
+ 282                         
+ 283  000000                                 EXTERN   TIM1_CCMR4.w  ; TIM1 Capture/Compare mode 
+                                                                ;register 4
+ 284                         
+ 285  000000                                 EXTERN   TIM1_CCER1.w  ; TIM1 Capture/Compare enable 
+                                                                ;register 1
+ 286                         
+ 287  000000                                 EXTERN   TIM1_CCER2.w  ; TIM1 Capture/Compare enable 
+                                                                ;register 2
+ 288                         
+ 289  000000                                 EXTERN   TIM1_CNTRH.w  ; Data bits High
+ 290                         
+ 291  000000                                 EXTERN   TIM1_CNTRL.w  ; Data bits Low
+ 292                         
+ 293  000000                                 EXTERN   TIM1_PSCRH.w  ; Data bits High
+ 294                         
+ 295  000000                                 EXTERN   TIM1_PSCRL.w  ; Data bits Low
+ 296                         
+ 297  000000                                 EXTERN   TIM1_ARRH.w   ; Data bits High
+ 298                         
+ 299  000000                                 EXTERN   TIM1_ARRL.w   ; Data bits Low
+ 300                         
+ 301  000000                                 EXTERN   TIM1_RCR.w    ; TIM1 Repetition counter 
+                                                                ;register
+ 302                         
+ 303  000000                                 EXTERN   TIM1_CCR1H.w  ; Data bits High
+ 304                         
+ 305  000000                                 EXTERN   TIM1_CCR1L.w  ; Data bits Low
+ 306                         
+ 307  000000                                 EXTERN   TIM1_CCR2H.w  ; Data bits High
+ 308                         
+ 309  000000                                 EXTERN   TIM1_CCR2L.w  ; Data bits Low
+ 310                         
+ 311  000000                                 EXTERN   TIM1_CCR3H.w  ; Data bits High
+ 312                         
+ 313  000000                                 EXTERN   TIM1_CCR3L.w  ; Data bits Low
+ 314                         
+ 315  000000                                 EXTERN   TIM1_CCR4H.w  ; Data bits High
+ 316                         
+ 317  000000                                 EXTERN   TIM1_CCR4L.w  ; Data bits Low
+ 318                         
+ 319  000000                                 EXTERN   TIM1_BKR.w    ; TIM1 Break register
+ 320                         
+ 321  000000                                 EXTERN   TIM1_DTR.w    ; TIM1 Dead-time register
+ 322                         
+ 323  000000                                 EXTERN   TIM1_OISR.w   ; TIM1 Output idle state 
+                                                                ;register
+ 324                         
+ 325                         ; 16-Bit Timer 2 (TIM2)
+STMicroelectronics assembler v4.52   (C)1987-2019   Wed Jun 19 15:36:16 2019
+Page 8  Assembler
+                                               e:\stm8s\elevator\driver\clock.asm
+
+ 326                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 327                         
+ 328  000000                                 EXTERN   TIM2_CR1.w    ; TIM2 Control register 1
+ 329                         
+ 330  000000                                 EXTERN   TIM2_IER.w    ; TIM2 Interrupt enable 
+                                                                ;register
+ 331                         
+ 332  000000                                 EXTERN   TIM2_SR1.w    ; TIM2 Status register 1
+ 333                         
+ 334  000000                                 EXTERN   TIM2_SR2.w    ; TIM2 Status register 2
+ 335                         
+ 336  000000                                 EXTERN   TIM2_EGR.w    ; TIM2 Event Generation 
+                                                                ;register
+ 337                         
+ 338  000000                                 EXTERN   TIM2_CCMR1.w  ; TIM2 Capture/Compare mode 
+                                                                ;register 1
+ 339                         
+ 340  000000                                 EXTERN   TIM2_CCMR2.w  ; TIM2 Capture/Compare mode 
+                                                                ;register 2
+ 341                         
+ 342  000000                                 EXTERN   TIM2_CCMR3.w  ; TIM2 Capture/Compare mode 
+                                                                ;register 3
+ 343                         
+ 344  000000                                 EXTERN   TIM2_CCER1.w  ; TIM2 Capture/Compare enable 
+                                                                ;register 1
+ 345                         
+ 346  000000                                 EXTERN   TIM2_CCER2.w  ; TIM2 Capture/Compare enable 
+                                                                ;register 2
+ 347                         
+ 348  000000                                 EXTERN   TIM2_CNTRH.w  ; Data bits High
+ 349                         
+ 350  000000                                 EXTERN   TIM2_CNTRL.w  ; Data bits Low
+ 351                         
+ 352  000000                                 EXTERN   TIM2_PSCR.w   ; TIM2 Prescaler register
+ 353                         
+ 354  000000                                 EXTERN   TIM2_ARRH.w   ; Data bits High
+ 355                         
+ 356  000000                                 EXTERN   TIM2_ARRL.w   ; Data bits Low
+ 357                         
+ 358  000000                                 EXTERN   TIM2_CCR1H.w  ; Data bits High
+ 359                         
+ 360  000000                                 EXTERN   TIM2_CCR1L.w  ; Data bits Low
+ 361                         
+ 362  000000                                 EXTERN   TIM2_CCR2H.w  ; Data bits High
+ 363                         
+ 364  000000                                 EXTERN   TIM2_CCR2L.w  ; Data bits Low
+ 365                         
+ 366  000000                                 EXTERN   TIM2_CCR3H.w  ; Data bits High
+ 367                         
+ 368  000000                                 EXTERN   TIM2_CCR3L.w  ; Data bits Low
+ 369                         
+ 370                         ; 16-Bit Timer 3 (TIM3)
+ 371                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 372                         
+ 373  000000                                 EXTERN   TIM3_CR1.w    ; TIM3 Control register 1
+STMicroelectronics assembler v4.52   (C)1987-2019   Wed Jun 19 15:36:16 2019
+Page 9  Assembler
+                                               e:\stm8s\elevator\driver\clock.asm
+
+ 374                         
+ 375  000000                                 EXTERN   TIM3_IER.w    ; TIM3 Interrupt enable 
+                                                                ;register
+ 376                         
+ 377  000000                                 EXTERN   TIM3_SR1.w    ; TIM3 Status register 1
+ 378                         
+ 379  000000                                 EXTERN   TIM3_SR2.w    ; TIM3 Status register 2
+ 380                         
+ 381  000000                                 EXTERN   TIM3_EGR.w    ; TIM3 Event Generation 
+                                                                ;register
+ 382                         
+ 383  000000                                 EXTERN   TIM3_CCMR1.w  ; TIM3 Capture/Compare mode 
+                                                                ;register 1
+ 384                         
+ 385  000000                                 EXTERN   TIM3_CCMR2.w  ; TIM3 Capture/Compare mode 
+                                                                ;register 2
+ 386                         
+ 387  000000                                 EXTERN   TIM3_CCER1.w  ; TIM3 Capture/Compare enable 
+                                                                ;register 1
+ 388                         
+ 389  000000                                 EXTERN   TIM3_CNTRH.w  ; Data bits High
+ 390                         
+ 391  000000                                 EXTERN   TIM3_CNTRL.w  ; Data bits Low
+ 392                         
+ 393  000000                                 EXTERN   TIM3_PSCR.w   ; TIM3 Prescaler register
+ 394                         
+ 395  000000                                 EXTERN   TIM3_ARRH.w   ; Data bits High
+ 396                         
+ 397  000000                                 EXTERN   TIM3_ARRL.w   ; Data bits Low
+ 398                         
+ 399  000000                                 EXTERN   TIM3_CCR1H.w  ; Data bits High
+ 400                         
+ 401  000000                                 EXTERN   TIM3_CCR1L.w  ; Data bits Low
+ 402                         
+ 403  000000                                 EXTERN   TIM3_CCR2H.w  ; Data bits High
+ 404                         
+ 405  000000                                 EXTERN   TIM3_CCR2L.w  ; Data bits Low
+ 406                         
+ 407                         ; 8-Bit  Timer 4 (TIM4)
+ 408                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 409                         
+ 410  000000                                 EXTERN   TIM4_CR1.w    ; TIM4 Control register 1
+ 411                         
+ 412  000000                                 EXTERN   TIM4_IER.w    ; TIM4 Interrupt enable 
+                                                                ;register
+ 413                         
+ 414  000000                                 EXTERN   TIM4_SR.w     ; TIM4 Status register
+ 415                         
+ 416  000000                                 EXTERN   TIM4_EGR.w    ; TIM4 Event Generation 
+                                                                ;register
+ 417                         
+ 418  000000                                 EXTERN   TIM4_CNTR.w   ; TIM4 Counter
+ 419                         
+ 420  000000                                 EXTERN   TIM4_PSCR.w   ; TIM4 Prescaler register
+ 421                         
+ 422  000000                                 EXTERN   TIM4_ARR.w    ; TIM4 Auto-reload register
+STMicroelectronics assembler v4.52   (C)1987-2019   Wed Jun 19 15:36:16 2019
+Page 10  Assembler
+                                               e:\stm8s\elevator\driver\clock.asm
+
+ 423                         
+ 424                         ; 10-Bit A/D Converter (ADC1)
+ 425                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 426                         
+ 427  000000                                 EXTERN   ADC_DB0RH.w   ; Data Buffer register 0 High
+ 428                         
+ 429  000000                                 EXTERN   ADC_DB0RL.w   ; Data Buffer register 0 Low
+ 430                         
+ 431  000000                                 EXTERN   ADC_DB1RH.w   ; Data Buffer register 1 High
+ 432                         
+ 433  000000                                 EXTERN   ADC_DB1RL.w   ; Data Buffer register 1 Low
+ 434                         
+ 435  000000                                 EXTERN   ADC_DB2RH.w   ; Data Buffer register 2 High
+ 436                         
+ 437  000000                                 EXTERN   ADC_DB2RL.w   ; Data Buffer register 2 Low
+ 438                         
+ 439  000000                                 EXTERN   ADC_DB3RH.w   ; Data Buffer register 3 High
+ 440                         
+ 441  000000                                 EXTERN   ADC_DB3RL.w   ; Data Buffer register 3 Low
+ 442                         
+ 443  000000                                 EXTERN   ADC_DB4RH.w   ; Data Buffer register 4 High
+ 444                         
+ 445  000000                                 EXTERN   ADC_DB4RL.w   ; Data Buffer register 4 Low
+ 446                         
+ 447  000000                                 EXTERN   ADC_DB5RH.w   ; Data Buffer register 5 High
+ 448                         
+ 449  000000                                 EXTERN   ADC_DB5RL.w   ; Data Buffer register 5 Low
+ 450                         
+ 451  000000                                 EXTERN   ADC_DB6RH.w   ; Data Buffer register 6 High
+ 452                         
+ 453  000000                                 EXTERN   ADC_DB6RL.w   ; Data Buffer register 6 Low
+ 454                         
+ 455  000000                                 EXTERN   ADC_DB7RH.w   ; Data Buffer register 7 High
+ 456                         
+ 457  000000                                 EXTERN   ADC_DB7RL.w   ; Data Buffer register 7 Low
+ 458                         
+ 459  000000                                 EXTERN   ADC_DB8RH.w   ; Data Buffer register 8 High
+ 460                         
+ 461  000000                                 EXTERN   ADC_DB8RL.w   ; Data Buffer register 8 Low
+ 462                         
+ 463  000000                                 EXTERN   ADC_DB9RH.w   ; Data Buffer register 9 High
+ 464                         
+ 465  000000                                 EXTERN   ADC_DB9RL.w   ; Data Buffer register 9 Low
+ 466                         
+ 467  000000                                 EXTERN   ADC_CSR.w     ; ADC Control/Status Register
+ 468                         
+ 469  000000                                 EXTERN   ADC_CR1.w     ; ADC Configuration Register 1
+ 470                         
+ 471  000000                                 EXTERN   ADC_CR2.w     ; ADC Configuration Register 2
+ 472                         
+ 473  000000                                 EXTERN   ADC_CR3.w     ; ADC Configuration Register 3
+ 474                         
+ 475  000000                                 EXTERN   ADC_DRH.w     ; Data bits High
+ 476                         
+ 477  000000                                 EXTERN   ADC_DRL.w     ; Data bits Low
+ 478                         
+STMicroelectronics assembler v4.52   (C)1987-2019   Wed Jun 19 15:36:16 2019
+Page 11  Assembler
+                                               e:\stm8s\elevator\driver\clock.asm
+
+ 479  000000                                 EXTERN   ADC_TDRH.w    ; Schmitt trigger disable High
+ 480                         
+ 481  000000                                 EXTERN   ADC_TDRL.w    ; Schmitt trigger disable Low
+ 482                         
+ 483  000000                                 EXTERN   ADC_HTRH.w    ; High Threshold Register High
+ 484                         
+ 485  000000                                 EXTERN   ADC_HTRL.w    ; High Threshold Register Low
+ 486                         
+ 487  000000                                 EXTERN   ADC_LTRH.w    ; Low Threshold Register High
+ 488                         
+ 489  000000                                 EXTERN   ADC_LTRL.w    ; Low Threshold Register Low
+ 490                         
+ 491  000000                                 EXTERN   ADC_AWSRH.w   ; Analog Watchdog Status 
+                                                                ;register High
+ 492                         
+ 493  000000                                 EXTERN   ADC_AWSRL.w   ; Analog Watchdog Status 
+                                                                ;register Low
+ 494                         
+ 495  000000                                 EXTERN   ADC_AWCRH.w   ; Analog Watchdog Control 
+                                                                ;register High
+ 496                         
+ 497  000000                                 EXTERN   ADC_AWCRL.w   ; Analog Watchdog Control 
+                                                                ;register Low
+ 498                         
+ 499                         ;  Global configuration register (CFG)
+ 500                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 501                         
+ 502  000000                                 EXTERN   CFG_GCR.w     ; CFG Global configuration 
+                                                                ;register
+ 503                         
+ 504                         ; Interrupt Software Priority Register (ITC)
+ 505                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 506                         
+ 507  000000                                 EXTERN   ITC_SPR1.w    ; Interrupt Software priority 
+                                                                ;register 1
+ 508                         
+ 509  000000                                 EXTERN   ITC_SPR2.w    ; Interrupt Software priority 
+                                                                ;register 2
+ 510                         
+ 511  000000                                 EXTERN   ITC_SPR3.w    ; Interrupt Software priority 
+                                                                ;register 3
+ 512                         
+ 513  000000                                 EXTERN   ITC_SPR4.w    ; Interrupt Software priority 
+                                                                ;register 4
+ 514                         
+ 515  000000                                 EXTERN   ITC_SPR5.w    ; Interrupt Software priority 
+                                                                ;register 5
+ 516                         
+ 517  000000                                 EXTERN   ITC_SPR6.w    ; Interrupt Software priority 
+                                                                ;register 6
+ 518                         
+ 519  000000                                 EXTERN   ITC_SPR7.w    ; Interrupt Software priority 
+                                                                ;register 7
+ 520                         
+ 521  000000                                 #endif                 ; __STM8S105K__
+<END_OF_INCLUSION>
+STMicroelectronics assembler v4.52   (C)1987-2019   Wed Jun 19 15:36:16 2019
+Page 12  Assembler
+                                               e:\stm8s\elevator\driver\clock.asm
+
+   6                                   
+   7  000000                                 #ENDIF   
+   8                         
+   9                         
+<END_OF_INCLUSION>
+   4                                   segment  'rom'
+   5  000000                                 INTEL    
+   6                         
+   7                         ; ---------------------------------
+   8                         ; name  : void HSIClockInit()	- 16MHZ
+   9                         ; params: 
+  10                         ;
+  11                         ; return: 
+  12                         ; =================================
+  13                         ; void HSIClockInit()
+  14                         ; {
+  15                         ; 	...
+  16                         ; }
+  17                         ; ---------------------------------
+  18                         .HSIClockInit.w  
+  19  000000   8A                            push     cc
+  20  000001   88                            push     A
+  21                         HSIClockInit_start:  
+  22                         
+  23                                                          ; => fHSI / 2 = 8Mhz
+  24  000002 X C60000                        ld       A, CLK_CKDIVR
+  25  000005   A4E7                          and      A, #11100111B
+  26  000007   AA08                          or       A, #00001000B
+  27  000009 X C70000                        ld       CLK_CKDIVR, A
+  28                         
+  29                         HSIClockInit_exit:  
+  30  00000C   84                            pop      A
+  31  00000D   86                            pop      cc
+  32  00000E   81                            ret      
+  33                         
+  34                         
+  35                         
+  36                         
+  37                         
+  38                         
+  39                         
+  40                         
+  41                         
+  42                         
+  43                         
+  44                         
+  45                         
+  46                         
+  47                         
+  48                         
+  49                         
+  50                         
+  51  00000F                                 end      
+STMicroelectronics assembler v4.52   (C)1987-2019   Wed Jun 19 15:36:16 2019
+Page 13  Assembler
+                                               e:\stm8s\elevator\driver\clock.asm
+
+Symbol Name                       Value     Call       Type  Scope      Rel.  Line  Privacy  Segment   Size  Bytes File
+
+AWU_CSR                           ????????         no  WORD  External   rel    170  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+AWU_APR                           ????????         no  WORD  External   rel    172  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+AWU_TBR                           ????????         no  WORD  External   rel    174  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB0RH                         ????????         no  WORD  External   rel    427  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB0RL                         ????????         no  WORD  External   rel    429  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB1RH                         ????????         no  WORD  External   rel    431  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB1RL                         ????????         no  WORD  External   rel    433  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB2RH                         ????????         no  WORD  External   rel    435  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB2RL                         ????????         no  WORD  External   rel    437  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB3RH                         ????????         no  WORD  External   rel    439  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB3RL                         ????????         no  WORD  External   rel    441  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB4RH                         ????????         no  WORD  External   rel    443  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB4RL                         ????????         no  WORD  External   rel    445  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB5RH                         ????????         no  WORD  External   rel    447  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB5RL                         ????????         no  WORD  External   rel    449  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB6RH                         ????????         no  WORD  External   rel    451  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB6RL                         ????????         no  WORD  External   rel    453  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB7RH                         ????????         no  WORD  External   rel    455  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB7RL                         ????????         no  WORD  External   rel    457  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB8RH                         ????????         no  WORD  External   rel    459  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB8RL                         ????????         no  WORD  External   rel    461  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB9RH                         ????????         no  WORD  External   rel    463  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB9RL                         ????????         no  WORD  External   rel    465  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_CSR                           ????????         no  WORD  External   rel    467  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_CR1                           ????????         no  WORD  External   rel    469  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_CR2                           ????????         no  WORD  External   rel    471  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_CR3                           ????????         no  WORD  External   rel    473  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DRH                           ????????         no  WORD  External   rel    475  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DRL                           ????????         no  WORD  External   rel    477  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_TDRH                          ????????         no  WORD  External   rel    479  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_TDRL                          ????????         no  WORD  External   rel    481  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_HTRH                          ????????         no  WORD  External   rel    483  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_HTRL                          ????????         no  WORD  External   rel    485  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_LTRH                          ????????         no  WORD  External   rel    487  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_LTRL                          ????????         no  WORD  External   rel    489  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_AWSRH                         ????????         no  WORD  External   rel    491  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_AWSRL                         ????????         no  WORD  External   rel    493  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_AWCRH                         ????????         no  WORD  External   rel    495  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_AWCRL                         ????????         no  WORD  External   rel    497  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+
+BEEP_CSR                          ????????         no  WORD  External   rel    179  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+
+CLK_ICKR                          ????????         no  WORD  External   rel    125  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_ECKR                          ????????         no  WORD  External   rel    127  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_CMSR                          ????????         no  WORD  External   rel    129  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_SWR                           ????????         no  WORD  External   rel    131  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_SWCR                          ????????         no  WORD  External   rel    133  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_CKDIVR                        ????????         no  WORD  External   rel    135  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_PCKENR1                       ????????         no  WORD  External   rel    137  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_CSSR                          ????????         no  WORD  External   rel    139  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_CCOR                          ????????         no  WORD  External   rel    141  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_PCKENR2                       ????????         no  WORD  External   rel    143  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_CANCCR                        ????????         no  WORD  External   rel    145  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_HSITRIMR                      ????????         no  WORD  External   rel    147  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_SWIMCCR                       ????????         no  WORD  External   rel    149  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+STMicroelectronics assembler v4.52   (C)1987-2019   Wed Jun 19 15:36:16 2019
+Page 14  Assembler
+                                               e:\stm8s\elevator\driver\clock.asm
+
+CFG_GCR                           ????????         no  WORD  External   rel    502  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+
+EXTI_CR1                          ????????         no  WORD  External   rel    113  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+EXTI_CR2                          ????????         no  WORD  External   rel    115  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+
+FLASH_CR1                         ????????         no  WORD  External   rel     94  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+FLASH_CR2                         ????????         no  WORD  External   rel     96  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+FLASH_NCR2                        ????????         no  WORD  External   rel     98  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+FLASH_FPR                         ????????         no  WORD  External   rel    100  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+FLASH_NFPR                        ????????         no  WORD  External   rel    102  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+FLASH_IAPSR                       ????????         no  WORD  External   rel    104  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+FLASH_PUKR                        ????????         no  WORD  External   rel    106  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+FLASH_DUKR                        ????????         no  WORD  External   rel    108  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+
+HSIClockInit                          0000         no  WORD  Internal   rel     18  public   text         2     0  -
+HSIClockInit_start                    0002         no  WORD  Internal   rel     21  private  text        10     0  -
+HSIClockInit_exit                     000C         no  WORD  Internal   rel     29  private  text         3     0  -
+
+IWDG_KR                           ????????         no  WORD  External   rel    161  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+IWDG_PR                           ????????         no  WORD  External   rel    163  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+IWDG_RLR                          ????????         no  WORD  External   rel    165  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_CR1                           ????????         no  WORD  External   rel    203  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_CR2                           ????????         no  WORD  External   rel    205  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_FREQR                         ????????         no  WORD  External   rel    207  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_OARL                          ????????         no  WORD  External   rel    209  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_OARH                          ????????         no  WORD  External   rel    211  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_DR                            ????????         no  WORD  External   rel    213  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_SR1                           ????????         no  WORD  External   rel    215  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_SR2                           ????????         no  WORD  External   rel    217  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_SR3                           ????????         no  WORD  External   rel    219  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_ITR                           ????????         no  WORD  External   rel    221  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_CCRL                          ????????         no  WORD  External   rel    223  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_CCRH                          ????????         no  WORD  External   rel    225  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_TRISER                        ????????         no  WORD  External   rel    227  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_PECR                          ????????         no  WORD  External   rel    229  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ITC_SPR1                          ????????         no  WORD  External   rel    507  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ITC_SPR2                          ????????         no  WORD  External   rel    509  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ITC_SPR3                          ????????         no  WORD  External   rel    511  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ITC_SPR4                          ????????         no  WORD  External   rel    513  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ITC_SPR5                          ????????         no  WORD  External   rel    515  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ITC_SPR6                          ????????         no  WORD  External   rel    517  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ITC_SPR7                          ????????         no  WORD  External   rel    519  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+
+PA_ODR                            ????????         no  WORD  External   rel     16  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PA_IDR                            ????????         no  WORD  External   rel     18  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PA_DDR                            ????????         no  WORD  External   rel     20  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PA_CR1                            ????????         no  WORD  External   rel     22  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PA_CR2                            ????????         no  WORD  External   rel     24  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PB_ODR                            ????????         no  WORD  External   rel     29  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PB_IDR                            ????????         no  WORD  External   rel     31  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PB_DDR                            ????????         no  WORD  External   rel     33  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PB_CR1                            ????????         no  WORD  External   rel     35  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PB_CR2                            ????????         no  WORD  External   rel     37  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PC_ODR                            ????????         no  WORD  External   rel     42  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PC_IDR                            ????????         no  WORD  External   rel     44  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PC_DDR                            ????????         no  WORD  External   rel     46  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PC_CR1                            ????????         no  WORD  External   rel     48  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+STMicroelectronics assembler v4.52   (C)1987-2019   Wed Jun 19 15:36:16 2019
+Page 15  Assembler
+                                               e:\stm8s\elevator\driver\clock.asm
+
+PC_CR2                            ????????         no  WORD  External   rel     50  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PD_ODR                            ????????         no  WORD  External   rel     55  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PD_IDR                            ????????         no  WORD  External   rel     57  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PD_DDR                            ????????         no  WORD  External   rel     59  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PD_CR1                            ????????         no  WORD  External   rel     61  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PD_CR2                            ????????         no  WORD  External   rel     63  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PE_ODR                            ????????         no  WORD  External   rel     68  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PE_IDR                            ????????         no  WORD  External   rel     70  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PE_DDR                            ????????         no  WORD  External   rel     72  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PE_CR1                            ????????         no  WORD  External   rel     74  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PE_CR2                            ????????         no  WORD  External   rel     76  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PF_ODR                            ????????         no  WORD  External   rel     81  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PF_IDR                            ????????         no  WORD  External   rel     83  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PF_DDR                            ????????         no  WORD  External   rel     85  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PF_CR1                            ????????         no  WORD  External   rel     87  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PF_CR2                            ????????         no  WORD  External   rel     89  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+
+RST_SR                            ????????         no  WORD  External   rel    120  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+
+SPI_CR1                           ????????         no  WORD  External   rel    184  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+SPI_CR2                           ????????         no  WORD  External   rel    186  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+SPI_ICR                           ????????         no  WORD  External   rel    188  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+SPI_SR                            ????????         no  WORD  External   rel    190  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+SPI_DR                            ????????         no  WORD  External   rel    192  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+SPI_CRCPR                         ????????         no  WORD  External   rel    194  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+SPI_RXCRCR                        ????????         no  WORD  External   rel    196  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+SPI_TXCRCR                        ????????         no  WORD  External   rel    198  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+
+TIM1_CR1                          ????????         no  WORD  External   rel    261  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CR2                          ????????         no  WORD  External   rel    263  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_SMCR                         ????????         no  WORD  External   rel    265  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_ETR                          ????????         no  WORD  External   rel    267  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_IER                          ????????         no  WORD  External   rel    269  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_SR1                          ????????         no  WORD  External   rel    271  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_SR2                          ????????         no  WORD  External   rel    273  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_EGR                          ????????         no  WORD  External   rel    275  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCMR1                        ????????         no  WORD  External   rel    277  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCMR2                        ????????         no  WORD  External   rel    279  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCMR3                        ????????         no  WORD  External   rel    281  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCMR4                        ????????         no  WORD  External   rel    283  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCER1                        ????????         no  WORD  External   rel    285  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCER2                        ????????         no  WORD  External   rel    287  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CNTRH                        ????????         no  WORD  External   rel    289  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CNTRL                        ????????         no  WORD  External   rel    291  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_PSCRH                        ????????         no  WORD  External   rel    293  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_PSCRL                        ????????         no  WORD  External   rel    295  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_ARRH                         ????????         no  WORD  External   rel    297  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_ARRL                         ????????         no  WORD  External   rel    299  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_RCR                          ????????         no  WORD  External   rel    301  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCR1H                        ????????         no  WORD  External   rel    303  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCR1L                        ????????         no  WORD  External   rel    305  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCR2H                        ????????         no  WORD  External   rel    307  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCR2L                        ????????         no  WORD  External   rel    309  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCR3H                        ????????         no  WORD  External   rel    311  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCR3L                        ????????         no  WORD  External   rel    313  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCR4H                        ????????         no  WORD  External   rel    315  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCR4L                        ????????         no  WORD  External   rel    317  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+STMicroelectronics assembler v4.52   (C)1987-2019   Wed Jun 19 15:36:16 2019
+Page 16  Assembler
+                                               e:\stm8s\elevator\driver\clock.asm
+
+TIM1_BKR                          ????????         no  WORD  External   rel    319  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_DTR                          ????????         no  WORD  External   rel    321  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_OISR                         ????????         no  WORD  External   rel    323  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CR1                          ????????         no  WORD  External   rel    328  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_IER                          ????????         no  WORD  External   rel    330  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_SR1                          ????????         no  WORD  External   rel    332  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_SR2                          ????????         no  WORD  External   rel    334  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_EGR                          ????????         no  WORD  External   rel    336  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCMR1                        ????????         no  WORD  External   rel    338  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCMR2                        ????????         no  WORD  External   rel    340  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCMR3                        ????????         no  WORD  External   rel    342  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCER1                        ????????         no  WORD  External   rel    344  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCER2                        ????????         no  WORD  External   rel    346  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CNTRH                        ????????         no  WORD  External   rel    348  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CNTRL                        ????????         no  WORD  External   rel    350  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_PSCR                         ????????         no  WORD  External   rel    352  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_ARRH                         ????????         no  WORD  External   rel    354  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_ARRL                         ????????         no  WORD  External   rel    356  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCR1H                        ????????         no  WORD  External   rel    358  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCR1L                        ????????         no  WORD  External   rel    360  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCR2H                        ????????         no  WORD  External   rel    362  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCR2L                        ????????         no  WORD  External   rel    364  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCR3H                        ????????         no  WORD  External   rel    366  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCR3L                        ????????         no  WORD  External   rel    368  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CR1                          ????????         no  WORD  External   rel    373  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_IER                          ????????         no  WORD  External   rel    375  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_SR1                          ????????         no  WORD  External   rel    377  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_SR2                          ????????         no  WORD  External   rel    379  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_EGR                          ????????         no  WORD  External   rel    381  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CCMR1                        ????????         no  WORD  External   rel    383  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CCMR2                        ????????         no  WORD  External   rel    385  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CCER1                        ????????         no  WORD  External   rel    387  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CNTRH                        ????????         no  WORD  External   rel    389  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CNTRL                        ????????         no  WORD  External   rel    391  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_PSCR                         ????????         no  WORD  External   rel    393  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_ARRH                         ????????         no  WORD  External   rel    395  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_ARRL                         ????????         no  WORD  External   rel    397  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CCR1H                        ????????         no  WORD  External   rel    399  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CCR1L                        ????????         no  WORD  External   rel    401  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CCR2H                        ????????         no  WORD  External   rel    403  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CCR2L                        ????????         no  WORD  External   rel    405  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM4_CR1                          ????????         no  WORD  External   rel    410  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM4_IER                          ????????         no  WORD  External   rel    412  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM4_SR                           ????????         no  WORD  External   rel    414  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM4_EGR                          ????????         no  WORD  External   rel    416  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM4_CNTR                         ????????         no  WORD  External   rel    418  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM4_PSCR                         ????????         no  WORD  External   rel    420  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM4_ARR                          ????????         no  WORD  External   rel    422  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+
+UART2_SR                          ????????         no  WORD  External   rel    234  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_DR                          ????????         no  WORD  External   rel    236  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_BRR1                        ????????         no  WORD  External   rel    238  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_BRR2                        ????????         no  WORD  External   rel    240  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_CR1                         ????????         no  WORD  External   rel    242  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_CR2                         ????????         no  WORD  External   rel    244  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_CR3                         ????????         no  WORD  External   rel    246  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_CR4                         ????????         no  WORD  External   rel    248  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+STMicroelectronics assembler v4.52   (C)1987-2019   Wed Jun 19 15:36:16 2019
+Page 17  Assembler
+                                               e:\stm8s\elevator\driver\clock.asm
+
+UART2_CR5                         ????????         no  WORD  External   rel    250  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_CR6                         ????????         no  WORD  External   rel    252  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_GTR                         ????????         no  WORD  External   rel    254  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_PSCR                        ????????         no  WORD  External   rel    256  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+
+WWDG_CR                           ????????         no  WORD  External   rel    154  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+WWDG_WR                           ????????         no  WORD  External   rel    156  private  text         0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+
+
+221 labels
+No errors on assembly of 'e:\stm8s\elevator\driver\clock.asm'

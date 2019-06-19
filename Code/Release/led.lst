@@ -1,0 +1,1662 @@
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 1  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+   1                         stm8/     
+   2                         
+   0  000000                                 #include "LED.inc"
+   1                         
+   2                         
+   3                         
+   4  000000 U                               #IFDEF   __LED_ 1
+   6  000000                                 #define  __LED_ 1
+   7                         
+   8                                                          ;;;;;;	FK = Floor & Keyboard 
+                                                                ;indicator
+   9                                                          ; LED_FK_SER = PB5
+  10  000000                                 #define  LED_FK_SER PB_ODR,#5
+  11                                                          ; LED_FK_SRCLK = PB4
+  12  000000                                 #define  LED_FK_SRCLK PB_ODR,#4
+  13                                                          ; LED_FK_RCLK = PB3
+  14  000000                                 #define  LED_FK_RCLK PB_ODR,#3
+  15                         
+  16                                                          ;;;;;;	CS = Door Counter & Door 
+                                                                ;Status	
+  17                                                          ; LED_FK_SER = PB0
+  18  000000                                 #define  LED_CS_SER PB_ODR,#0
+  19                                                          ; LED_FK_SRCLK = PB1
+  20  000000                                 #define  LED_CS_SRCLK PB_ODR,#1
+  21                                                          ; LED_FK_RCLK = PB2
+  22  000000                                 #define  LED_CS_RCLK PB_ODR,#2
+  23                         
+  24                                                          ;;;;; Elevator Direction
+  25                                                          ; LED_DIR_UP = PE5
+  26  000000                                 #define  LED_DIR_UP PE_ODR,#5
+  27                                                          ; LED_DIR_DOWN = PF4
+  28  000000                                 #define  LED_DIR_DOWN PF_ODR,#4
+  29                         
+  30                         
+   0  000000                                 #include "STM8S105K4.inc"
+   1                         ; STM8S105K4.inc
+   2  000000 U                               #IFDEF   __INCLUDE_STM8S105K4_
+   4  000000                                 #define  __INCLUDE_STM8S105K4_ 1
+   0  000000                                 #include "STM8S105K.inc"
+   1                         ; STM8S105K.inc
+   2                         
+   3                         ; Copyright (c) 2003-2012 STMicroelectronics
+   4                         
+   5  000000 U                               #ifdef   __STM8S105K__
+   8  000000                                 #define  __STM8S105K__ 1
+   9                         
+  10                         ; STM8S105K
+  11                         
+  12                         
+  13                         ; Port A
+  14                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+  15                         
+  16  000000                                 EXTERN   PA_ODR.w      ; Port A data output latch 
+                                                                ;register
+  17                         
+  18  000000                                 EXTERN   PA_IDR.w      ; Port A input pin value 
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 2  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+                                                                ;register
+  19                         
+  20  000000                                 EXTERN   PA_DDR.w      ; Port A data direction 
+                                                                ;register
+  21                         
+  22  000000                                 EXTERN   PA_CR1.w      ; Port A control register 1
+  23                         
+  24  000000                                 EXTERN   PA_CR2.w      ; Port A control register 2
+  25                         
+  26                         ; Port B
+  27                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+  28                         
+  29  000000                                 EXTERN   PB_ODR.w      ; Port B data output latch 
+                                                                ;register
+  30                         
+  31  000000                                 EXTERN   PB_IDR.w      ; Port B input pin value 
+                                                                ;register
+  32                         
+  33  000000                                 EXTERN   PB_DDR.w      ; Port B data direction 
+                                                                ;register
+  34                         
+  35  000000                                 EXTERN   PB_CR1.w      ; Port B control register 1
+  36                         
+  37  000000                                 EXTERN   PB_CR2.w      ; Port B control register 2
+  38                         
+  39                         ; Port C
+  40                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+  41                         
+  42  000000                                 EXTERN   PC_ODR.w      ; Port C data output latch 
+                                                                ;register
+  43                         
+  44  000000                                 EXTERN   PC_IDR.w      ; Port C input pin value 
+                                                                ;register
+  45                         
+  46  000000                                 EXTERN   PC_DDR.w      ; Port C data direction 
+                                                                ;register
+  47                         
+  48  000000                                 EXTERN   PC_CR1.w      ; Port C control register 1
+  49                         
+  50  000000                                 EXTERN   PC_CR2.w      ; Port C control register 2
+  51                         
+  52                         ; Port D
+  53                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+  54                         
+  55  000000                                 EXTERN   PD_ODR.w      ; Port D data output latch 
+                                                                ;register
+  56                         
+  57  000000                                 EXTERN   PD_IDR.w      ; Port D input pin value 
+                                                                ;register
+  58                         
+  59  000000                                 EXTERN   PD_DDR.w      ; Port D data direction 
+                                                                ;register
+  60                         
+  61  000000                                 EXTERN   PD_CR1.w      ; Port D control register 1
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 3  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+  62                         
+  63  000000                                 EXTERN   PD_CR2.w      ; Port D control register 2
+  64                         
+  65                         ; Port E
+  66                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+  67                         
+  68  000000                                 EXTERN   PE_ODR.w      ; Port E data output latch 
+                                                                ;register
+  69                         
+  70  000000                                 EXTERN   PE_IDR.w      ; Port E input pin value 
+                                                                ;register
+  71                         
+  72  000000                                 EXTERN   PE_DDR.w      ; Port E data direction 
+                                                                ;register
+  73                         
+  74  000000                                 EXTERN   PE_CR1.w      ; Port E control register 1
+  75                         
+  76  000000                                 EXTERN   PE_CR2.w      ; Port E control register 2
+  77                         
+  78                         ; Port F
+  79                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+  80                         
+  81  000000                                 EXTERN   PF_ODR.w      ; Port F data output latch 
+                                                                ;register
+  82                         
+  83  000000                                 EXTERN   PF_IDR.w      ; Port F input pin value 
+                                                                ;register
+  84                         
+  85  000000                                 EXTERN   PF_DDR.w      ; Port F data direction 
+                                                                ;register
+  86                         
+  87  000000                                 EXTERN   PF_CR1.w      ; Port F control register 1
+  88                         
+  89  000000                                 EXTERN   PF_CR2.w      ; Port F control register 2
+  90                         
+  91                         ; Flash
+  92                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+  93                         
+  94  000000                                 EXTERN   FLASH_CR1.w   ; Flash control register 1
+  95                         
+  96  000000                                 EXTERN   FLASH_CR2.w   ; Flash control register 2
+  97                         
+  98  000000                                 EXTERN   FLASH_NCR2.w  ; Flash complementary control 
+                                                                ;register 2
+  99                         
+ 100  000000                                 EXTERN   FLASH_FPR.w   ; Flash protection register
+ 101                         
+ 102  000000                                 EXTERN   FLASH_NFPR.w  ; Flash complementary protection
+                                                                ; register
+ 103                         
+ 104  000000                                 EXTERN   FLASH_IAPSR.w  ; Flash in-application 
+                                                                ;programming status register
+ 105                         
+ 106  000000                                 EXTERN   FLASH_PUKR.w  ; Flash Program memory 
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 4  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+                                                                ;unprotection register
+ 107                         
+ 108  000000                                 EXTERN   FLASH_DUKR.w  ; Data EEPROM unprotection 
+                                                                ;register
+ 109                         
+ 110                         ; External Interrupt Control Register (ITC)
+ 111                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 112                         
+ 113  000000                                 EXTERN   EXTI_CR1.w    ; External interrupt control 
+                                                                ;register 1
+ 114                         
+ 115  000000                                 EXTERN   EXTI_CR2.w    ; External interrupt control 
+                                                                ;register 2
+ 116                         
+ 117                         ; Reset (RST)
+ 118                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 119                         
+ 120  000000                                 EXTERN   RST_SR.w      ; Reset status register 1
+ 121                         
+ 122                         ; Clock Control (CLK)
+ 123                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 124                         
+ 125  000000                                 EXTERN   CLK_ICKR.w    ; Internal clock control 
+                                                                ;register
+ 126                         
+ 127  000000                                 EXTERN   CLK_ECKR.w    ; External clock control 
+                                                                ;register
+ 128                         
+ 129  000000                                 EXTERN   CLK_CMSR.w    ; Clock master status register
+ 130                         
+ 131  000000                                 EXTERN   CLK_SWR.w     ; Clock master switch register
+ 132                         
+ 133  000000                                 EXTERN   CLK_SWCR.w    ; Clock switch control register
+ 134                         
+ 135  000000                                 EXTERN   CLK_CKDIVR.w  ; Clock divider register
+ 136                         
+ 137  000000                                 EXTERN   CLK_PCKENR1.w  ; Peripheral clock gating 
+                                                                ;register 1
+ 138                         
+ 139  000000                                 EXTERN   CLK_CSSR.w    ; Clock security system 
+                                                                ;register
+ 140                         
+ 141  000000                                 EXTERN   CLK_CCOR.w    ; Configurable clock control 
+                                                                ;register
+ 142                         
+ 143  000000                                 EXTERN   CLK_PCKENR2.w  ; Peripheral clock gating 
+                                                                ;register 2
+ 144                         
+ 145  000000                                 EXTERN   CLK_CANCCR.w  ; CAN clock control register
+ 146                         
+ 147  000000                                 EXTERN   CLK_HSITRIMR.w  ; HSI clock calibration trimming
+                                                                ; register
+ 148                         
+ 149  000000                                 EXTERN   CLK_SWIMCCR.w  ; SWIM clock control register
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 5  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+ 150                         
+ 151                         ; Window Watchdog (WWDG)
+ 152                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 153                         
+ 154  000000                                 EXTERN   WWDG_CR.w     ; WWDG Control Register
+ 155                         
+ 156  000000                                 EXTERN   WWDG_WR.w     ; WWDR Window Register
+ 157                         
+ 158                         ; Independent Watchdog (IWDG)
+ 159                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 160                         
+ 161  000000                                 EXTERN   IWDG_KR.w     ; IWDG Key Register
+ 162                         
+ 163  000000                                 EXTERN   IWDG_PR.w     ; IWDG Prescaler Register
+ 164                         
+ 165  000000                                 EXTERN   IWDG_RLR.w    ; IWDG Reload Register
+ 166                         
+ 167                         ; Auto Wake-Up (AWU)
+ 168                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 169                         
+ 170  000000                                 EXTERN   AWU_CSR.w     ; AWU Control/Status Register
+ 171                         
+ 172  000000                                 EXTERN   AWU_APR.w     ; AWU asynchronous prescaler 
+                                                                ;buffer register
+ 173                         
+ 174  000000                                 EXTERN   AWU_TBR.w     ; AWU Timebase selection 
+                                                                ;register
+ 175                         
+ 176                         ; Beeper (BEEP)
+ 177                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 178                         
+ 179  000000                                 EXTERN   BEEP_CSR.w    ; BEEP Control/Status Register
+ 180                         
+ 181                         ; Serial Peripheral Interface (SPI)
+ 182                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 183                         
+ 184  000000                                 EXTERN   SPI_CR1.w     ; SPI Control Register 1
+ 185                         
+ 186  000000                                 EXTERN   SPI_CR2.w     ; SPI Control Register 2
+ 187                         
+ 188  000000                                 EXTERN   SPI_ICR.w     ; SPI Interrupt Control 
+                                                                ;Register
+ 189                         
+ 190  000000                                 EXTERN   SPI_SR.w      ; SPI Status Register
+ 191                         
+ 192  000000                                 EXTERN   SPI_DR.w      ; SPI Data Register
+ 193                         
+ 194  000000                                 EXTERN   SPI_CRCPR.w   ; SPI CRC Polynomial Register
+ 195                         
+ 196  000000                                 EXTERN   SPI_RXCRCR.w  ; SPI Rx CRC Register
+ 197                         
+ 198  000000                                 EXTERN   SPI_TXCRCR.w  ; SPI Tx CRC Register
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 6  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+ 199                         
+ 200                         ; I2C Bus Interface (I2C)
+ 201                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 202                         
+ 203  000000                                 EXTERN   I2C_CR1.w     ; I2C control register 1
+ 204                         
+ 205  000000                                 EXTERN   I2C_CR2.w     ; I2C control register 2
+ 206                         
+ 207  000000                                 EXTERN   I2C_FREQR.w   ; I2C frequency register
+ 208                         
+ 209  000000                                 EXTERN   I2C_OARL.w    ; I2C Own address register low
+ 210                         
+ 211  000000                                 EXTERN   I2C_OARH.w    ; I2C Own address register high
+ 212                         
+ 213  000000                                 EXTERN   I2C_DR.w      ; I2C data register
+ 214                         
+ 215  000000                                 EXTERN   I2C_SR1.w     ; I2C status register 1
+ 216                         
+ 217  000000                                 EXTERN   I2C_SR2.w     ; I2C status register 2
+ 218                         
+ 219  000000                                 EXTERN   I2C_SR3.w     ; I2C status register 3
+ 220                         
+ 221  000000                                 EXTERN   I2C_ITR.w     ; I2C interrupt control 
+                                                                ;register
+ 222                         
+ 223  000000                                 EXTERN   I2C_CCRL.w    ; I2C Clock control register 
+                                                                ;low
+ 224                         
+ 225  000000                                 EXTERN   I2C_CCRH.w    ; I2C Clock control register 
+                                                                ;high
+ 226                         
+ 227  000000                                 EXTERN   I2C_TRISER.w  ; I2C TRISE register
+ 228                         
+ 229  000000                                 EXTERN   I2C_PECR.w    ; I2C packet error checking 
+                                                                ;register
+ 230                         
+ 231                         ; LIN Universal asynch. receiver transmitter (UART2)
+ 232                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 233                         
+ 234  000000                                 EXTERN   UART2_SR.w    ; UART2 Status Register
+ 235                         
+ 236  000000                                 EXTERN   UART2_DR.w    ; UART2 Data Register
+ 237                         
+ 238  000000                                 EXTERN   UART2_BRR1.w  ; UART2 Baud Rate Register 1
+ 239                         
+ 240  000000                                 EXTERN   UART2_BRR2.w  ; UART2 Baud Rate Register 2
+ 241                         
+ 242  000000                                 EXTERN   UART2_CR1.w   ; UART2 Control Register 1
+ 243                         
+ 244  000000                                 EXTERN   UART2_CR2.w   ; UART2 Control Register 2
+ 245                         
+ 246  000000                                 EXTERN   UART2_CR3.w   ; UART2 Control Register 3
+ 247                         
+ 248  000000                                 EXTERN   UART2_CR4.w   ; UART2 Control Register 4
+ 249                         
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 7  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+ 250  000000                                 EXTERN   UART2_CR5.w   ; UART2 Control Register 5
+ 251                         
+ 252  000000                                 EXTERN   UART2_CR6.w   ; UART2 Control Register 6
+ 253                         
+ 254  000000                                 EXTERN   UART2_GTR.w   ; UART2 Guard time Register
+ 255                         
+ 256  000000                                 EXTERN   UART2_PSCR.w  ; UART2 Prescaler Register
+ 257                         
+ 258                         ; 16-Bit Timer 1 (TIM1)
+ 259                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 260                         
+ 261  000000                                 EXTERN   TIM1_CR1.w    ; TIM1 Control register 1
+ 262                         
+ 263  000000                                 EXTERN   TIM1_CR2.w    ; TIM1 Control register 2
+ 264                         
+ 265  000000                                 EXTERN   TIM1_SMCR.w   ; TIM1 Slave Mode Control 
+                                                                ;register
+ 266                         
+ 267  000000                                 EXTERN   TIM1_ETR.w    ; TIM1 external trigger 
+                                                                ;register
+ 268                         
+ 269  000000                                 EXTERN   TIM1_IER.w    ; TIM1 Interrupt enable 
+                                                                ;register
+ 270                         
+ 271  000000                                 EXTERN   TIM1_SR1.w    ; TIM1 Status register 1
+ 272                         
+ 273  000000                                 EXTERN   TIM1_SR2.w    ; TIM1 Status register 2
+ 274                         
+ 275  000000                                 EXTERN   TIM1_EGR.w    ; TIM1 Event Generation 
+                                                                ;register
+ 276                         
+ 277  000000                                 EXTERN   TIM1_CCMR1.w  ; TIM1 Capture/Compare mode 
+                                                                ;register 1
+ 278                         
+ 279  000000                                 EXTERN   TIM1_CCMR2.w  ; TIM1 Capture/Compare mode 
+                                                                ;register 2
+ 280                         
+ 281  000000                                 EXTERN   TIM1_CCMR3.w  ; TIM1 Capture/Compare mode 
+                                                                ;register 3
+ 282                         
+ 283  000000                                 EXTERN   TIM1_CCMR4.w  ; TIM1 Capture/Compare mode 
+                                                                ;register 4
+ 284                         
+ 285  000000                                 EXTERN   TIM1_CCER1.w  ; TIM1 Capture/Compare enable 
+                                                                ;register 1
+ 286                         
+ 287  000000                                 EXTERN   TIM1_CCER2.w  ; TIM1 Capture/Compare enable 
+                                                                ;register 2
+ 288                         
+ 289  000000                                 EXTERN   TIM1_CNTRH.w  ; Data bits High
+ 290                         
+ 291  000000                                 EXTERN   TIM1_CNTRL.w  ; Data bits Low
+ 292                         
+ 293  000000                                 EXTERN   TIM1_PSCRH.w  ; Data bits High
+ 294                         
+ 295  000000                                 EXTERN   TIM1_PSCRL.w  ; Data bits Low
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 8  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+ 296                         
+ 297  000000                                 EXTERN   TIM1_ARRH.w   ; Data bits High
+ 298                         
+ 299  000000                                 EXTERN   TIM1_ARRL.w   ; Data bits Low
+ 300                         
+ 301  000000                                 EXTERN   TIM1_RCR.w    ; TIM1 Repetition counter 
+                                                                ;register
+ 302                         
+ 303  000000                                 EXTERN   TIM1_CCR1H.w  ; Data bits High
+ 304                         
+ 305  000000                                 EXTERN   TIM1_CCR1L.w  ; Data bits Low
+ 306                         
+ 307  000000                                 EXTERN   TIM1_CCR2H.w  ; Data bits High
+ 308                         
+ 309  000000                                 EXTERN   TIM1_CCR2L.w  ; Data bits Low
+ 310                         
+ 311  000000                                 EXTERN   TIM1_CCR3H.w  ; Data bits High
+ 312                         
+ 313  000000                                 EXTERN   TIM1_CCR3L.w  ; Data bits Low
+ 314                         
+ 315  000000                                 EXTERN   TIM1_CCR4H.w  ; Data bits High
+ 316                         
+ 317  000000                                 EXTERN   TIM1_CCR4L.w  ; Data bits Low
+ 318                         
+ 319  000000                                 EXTERN   TIM1_BKR.w    ; TIM1 Break register
+ 320                         
+ 321  000000                                 EXTERN   TIM1_DTR.w    ; TIM1 Dead-time register
+ 322                         
+ 323  000000                                 EXTERN   TIM1_OISR.w   ; TIM1 Output idle state 
+                                                                ;register
+ 324                         
+ 325                         ; 16-Bit Timer 2 (TIM2)
+ 326                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 327                         
+ 328  000000                                 EXTERN   TIM2_CR1.w    ; TIM2 Control register 1
+ 329                         
+ 330  000000                                 EXTERN   TIM2_IER.w    ; TIM2 Interrupt enable 
+                                                                ;register
+ 331                         
+ 332  000000                                 EXTERN   TIM2_SR1.w    ; TIM2 Status register 1
+ 333                         
+ 334  000000                                 EXTERN   TIM2_SR2.w    ; TIM2 Status register 2
+ 335                         
+ 336  000000                                 EXTERN   TIM2_EGR.w    ; TIM2 Event Generation 
+                                                                ;register
+ 337                         
+ 338  000000                                 EXTERN   TIM2_CCMR1.w  ; TIM2 Capture/Compare mode 
+                                                                ;register 1
+ 339                         
+ 340  000000                                 EXTERN   TIM2_CCMR2.w  ; TIM2 Capture/Compare mode 
+                                                                ;register 2
+ 341                         
+ 342  000000                                 EXTERN   TIM2_CCMR3.w  ; TIM2 Capture/Compare mode 
+                                                                ;register 3
+ 343                         
+ 344  000000                                 EXTERN   TIM2_CCER1.w  ; TIM2 Capture/Compare enable 
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 9  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+                                                                ;register 1
+ 345                         
+ 346  000000                                 EXTERN   TIM2_CCER2.w  ; TIM2 Capture/Compare enable 
+                                                                ;register 2
+ 347                         
+ 348  000000                                 EXTERN   TIM2_CNTRH.w  ; Data bits High
+ 349                         
+ 350  000000                                 EXTERN   TIM2_CNTRL.w  ; Data bits Low
+ 351                         
+ 352  000000                                 EXTERN   TIM2_PSCR.w   ; TIM2 Prescaler register
+ 353                         
+ 354  000000                                 EXTERN   TIM2_ARRH.w   ; Data bits High
+ 355                         
+ 356  000000                                 EXTERN   TIM2_ARRL.w   ; Data bits Low
+ 357                         
+ 358  000000                                 EXTERN   TIM2_CCR1H.w  ; Data bits High
+ 359                         
+ 360  000000                                 EXTERN   TIM2_CCR1L.w  ; Data bits Low
+ 361                         
+ 362  000000                                 EXTERN   TIM2_CCR2H.w  ; Data bits High
+ 363                         
+ 364  000000                                 EXTERN   TIM2_CCR2L.w  ; Data bits Low
+ 365                         
+ 366  000000                                 EXTERN   TIM2_CCR3H.w  ; Data bits High
+ 367                         
+ 368  000000                                 EXTERN   TIM2_CCR3L.w  ; Data bits Low
+ 369                         
+ 370                         ; 16-Bit Timer 3 (TIM3)
+ 371                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 372                         
+ 373  000000                                 EXTERN   TIM3_CR1.w    ; TIM3 Control register 1
+ 374                         
+ 375  000000                                 EXTERN   TIM3_IER.w    ; TIM3 Interrupt enable 
+                                                                ;register
+ 376                         
+ 377  000000                                 EXTERN   TIM3_SR1.w    ; TIM3 Status register 1
+ 378                         
+ 379  000000                                 EXTERN   TIM3_SR2.w    ; TIM3 Status register 2
+ 380                         
+ 381  000000                                 EXTERN   TIM3_EGR.w    ; TIM3 Event Generation 
+                                                                ;register
+ 382                         
+ 383  000000                                 EXTERN   TIM3_CCMR1.w  ; TIM3 Capture/Compare mode 
+                                                                ;register 1
+ 384                         
+ 385  000000                                 EXTERN   TIM3_CCMR2.w  ; TIM3 Capture/Compare mode 
+                                                                ;register 2
+ 386                         
+ 387  000000                                 EXTERN   TIM3_CCER1.w  ; TIM3 Capture/Compare enable 
+                                                                ;register 1
+ 388                         
+ 389  000000                                 EXTERN   TIM3_CNTRH.w  ; Data bits High
+ 390                         
+ 391  000000                                 EXTERN   TIM3_CNTRL.w  ; Data bits Low
+ 392                         
+ 393  000000                                 EXTERN   TIM3_PSCR.w   ; TIM3 Prescaler register
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 10  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+ 394                         
+ 395  000000                                 EXTERN   TIM3_ARRH.w   ; Data bits High
+ 396                         
+ 397  000000                                 EXTERN   TIM3_ARRL.w   ; Data bits Low
+ 398                         
+ 399  000000                                 EXTERN   TIM3_CCR1H.w  ; Data bits High
+ 400                         
+ 401  000000                                 EXTERN   TIM3_CCR1L.w  ; Data bits Low
+ 402                         
+ 403  000000                                 EXTERN   TIM3_CCR2H.w  ; Data bits High
+ 404                         
+ 405  000000                                 EXTERN   TIM3_CCR2L.w  ; Data bits Low
+ 406                         
+ 407                         ; 8-Bit  Timer 4 (TIM4)
+ 408                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 409                         
+ 410  000000                                 EXTERN   TIM4_CR1.w    ; TIM4 Control register 1
+ 411                         
+ 412  000000                                 EXTERN   TIM4_IER.w    ; TIM4 Interrupt enable 
+                                                                ;register
+ 413                         
+ 414  000000                                 EXTERN   TIM4_SR.w     ; TIM4 Status register
+ 415                         
+ 416  000000                                 EXTERN   TIM4_EGR.w    ; TIM4 Event Generation 
+                                                                ;register
+ 417                         
+ 418  000000                                 EXTERN   TIM4_CNTR.w   ; TIM4 Counter
+ 419                         
+ 420  000000                                 EXTERN   TIM4_PSCR.w   ; TIM4 Prescaler register
+ 421                         
+ 422  000000                                 EXTERN   TIM4_ARR.w    ; TIM4 Auto-reload register
+ 423                         
+ 424                         ; 10-Bit A/D Converter (ADC1)
+ 425                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 426                         
+ 427  000000                                 EXTERN   ADC_DB0RH.w   ; Data Buffer register 0 High
+ 428                         
+ 429  000000                                 EXTERN   ADC_DB0RL.w   ; Data Buffer register 0 Low
+ 430                         
+ 431  000000                                 EXTERN   ADC_DB1RH.w   ; Data Buffer register 1 High
+ 432                         
+ 433  000000                                 EXTERN   ADC_DB1RL.w   ; Data Buffer register 1 Low
+ 434                         
+ 435  000000                                 EXTERN   ADC_DB2RH.w   ; Data Buffer register 2 High
+ 436                         
+ 437  000000                                 EXTERN   ADC_DB2RL.w   ; Data Buffer register 2 Low
+ 438                         
+ 439  000000                                 EXTERN   ADC_DB3RH.w   ; Data Buffer register 3 High
+ 440                         
+ 441  000000                                 EXTERN   ADC_DB3RL.w   ; Data Buffer register 3 Low
+ 442                         
+ 443  000000                                 EXTERN   ADC_DB4RH.w   ; Data Buffer register 4 High
+ 444                         
+ 445  000000                                 EXTERN   ADC_DB4RL.w   ; Data Buffer register 4 Low
+ 446                         
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 11  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+ 447  000000                                 EXTERN   ADC_DB5RH.w   ; Data Buffer register 5 High
+ 448                         
+ 449  000000                                 EXTERN   ADC_DB5RL.w   ; Data Buffer register 5 Low
+ 450                         
+ 451  000000                                 EXTERN   ADC_DB6RH.w   ; Data Buffer register 6 High
+ 452                         
+ 453  000000                                 EXTERN   ADC_DB6RL.w   ; Data Buffer register 6 Low
+ 454                         
+ 455  000000                                 EXTERN   ADC_DB7RH.w   ; Data Buffer register 7 High
+ 456                         
+ 457  000000                                 EXTERN   ADC_DB7RL.w   ; Data Buffer register 7 Low
+ 458                         
+ 459  000000                                 EXTERN   ADC_DB8RH.w   ; Data Buffer register 8 High
+ 460                         
+ 461  000000                                 EXTERN   ADC_DB8RL.w   ; Data Buffer register 8 Low
+ 462                         
+ 463  000000                                 EXTERN   ADC_DB9RH.w   ; Data Buffer register 9 High
+ 464                         
+ 465  000000                                 EXTERN   ADC_DB9RL.w   ; Data Buffer register 9 Low
+ 466                         
+ 467  000000                                 EXTERN   ADC_CSR.w     ; ADC Control/Status Register
+ 468                         
+ 469  000000                                 EXTERN   ADC_CR1.w     ; ADC Configuration Register 1
+ 470                         
+ 471  000000                                 EXTERN   ADC_CR2.w     ; ADC Configuration Register 2
+ 472                         
+ 473  000000                                 EXTERN   ADC_CR3.w     ; ADC Configuration Register 3
+ 474                         
+ 475  000000                                 EXTERN   ADC_DRH.w     ; Data bits High
+ 476                         
+ 477  000000                                 EXTERN   ADC_DRL.w     ; Data bits Low
+ 478                         
+ 479  000000                                 EXTERN   ADC_TDRH.w    ; Schmitt trigger disable High
+ 480                         
+ 481  000000                                 EXTERN   ADC_TDRL.w    ; Schmitt trigger disable Low
+ 482                         
+ 483  000000                                 EXTERN   ADC_HTRH.w    ; High Threshold Register High
+ 484                         
+ 485  000000                                 EXTERN   ADC_HTRL.w    ; High Threshold Register Low
+ 486                         
+ 487  000000                                 EXTERN   ADC_LTRH.w    ; Low Threshold Register High
+ 488                         
+ 489  000000                                 EXTERN   ADC_LTRL.w    ; Low Threshold Register Low
+ 490                         
+ 491  000000                                 EXTERN   ADC_AWSRH.w   ; Analog Watchdog Status 
+                                                                ;register High
+ 492                         
+ 493  000000                                 EXTERN   ADC_AWSRL.w   ; Analog Watchdog Status 
+                                                                ;register Low
+ 494                         
+ 495  000000                                 EXTERN   ADC_AWCRH.w   ; Analog Watchdog Control 
+                                                                ;register High
+ 496                         
+ 497  000000                                 EXTERN   ADC_AWCRL.w   ; Analog Watchdog Control 
+                                                                ;register Low
+ 498                         
+ 499                         ;  Global configuration register (CFG)
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 12  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+ 500                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 501                         
+ 502  000000                                 EXTERN   CFG_GCR.w     ; CFG Global configuration 
+                                                                ;register
+ 503                         
+ 504                         ; Interrupt Software Priority Register (ITC)
+ 505                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                               ;;;;;;
+ 506                         
+ 507  000000                                 EXTERN   ITC_SPR1.w    ; Interrupt Software priority 
+                                                                ;register 1
+ 508                         
+ 509  000000                                 EXTERN   ITC_SPR2.w    ; Interrupt Software priority 
+                                                                ;register 2
+ 510                         
+ 511  000000                                 EXTERN   ITC_SPR3.w    ; Interrupt Software priority 
+                                                                ;register 3
+ 512                         
+ 513  000000                                 EXTERN   ITC_SPR4.w    ; Interrupt Software priority 
+                                                                ;register 4
+ 514                         
+ 515  000000                                 EXTERN   ITC_SPR5.w    ; Interrupt Software priority 
+                                                                ;register 5
+ 516                         
+ 517  000000                                 EXTERN   ITC_SPR6.w    ; Interrupt Software priority 
+                                                                ;register 6
+ 518                         
+ 519  000000                                 EXTERN   ITC_SPR7.w    ; Interrupt Software priority 
+                                                                ;register 7
+ 520                         
+ 521  000000                                 #endif                 ; __STM8S105K__
+<END_OF_INCLUSION>
+   6                                   
+   7  000000                                 #ENDIF   
+   8                         
+   9                         
+<END_OF_INCLUSION>
+   0  000000                                 #include "Variable.inc"
+   1                         
+   2  000000 U                               #IFDEF   __VARIABLE_ 1
+   4                                   
+   5  000000                                 #define  MAX_FLOOR 8
+   6                                   
+   7  000000                                 #define  REQ_NULL 0
+   8  000000                                 #define  REQ_DOWN 00000001B
+   9  000000                                 #define  REQ_UP 00000010B
+  10  000000                                 #define  REQ_UP_DOWN 0000011B
+  11                                   
+  12  000000                                 #define  False 0
+  13  000000                                 #define  True 1
+  14                                   
+  15                         
+  16  000000                                 #define  TARGET_QUEUE_TOP 5FFH
+  17                         
+  18  000000                                 #define  STATUS_MOV 1
+  19  000000                                 #define  STATUS_IDLE 0
+  20  000000                                 #define  STATUS_OPEN 2
+  21  000000                                 #define  STATUS_CLOSE 3
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 13  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+  22                                                          ; #define STATUS_DOWN 00000001B
+  23                                                          ; #define STATUS_UP 00000010B
+  24                                                          ; #define STATUS_STAY 0000011B
+  25                         
+  26  000000                                 #define  DIR_NULL 00000000B
+  27  000000                                 #define  DIR_DOWN 00000001B
+  28  000000                                 #define  DIR_UP 00000010B
+  29                         
+  30  000000                                 #define  INVALID_TARGET 0
+  31                         
+   0  000000                                 #include "STM8S105K4.inc"
+   1                         ; STM8S105K4.inc
+   2  000000                                 #IFDEF   1
+   3  000000                                 #ELSE    
+   8                         
+   9                         
+<END_OF_INCLUSION>
+  33                         
+  34                         
+  35  000000                                 #define  MOVING_TIME 2
+  36  000000                                 #define  CLOSE_TIME 10
+  37  000000                                 #define  OPEN_TIME 10
+  38                                                          ; #define BEEP_TIME 3
+  39                         
+  40                         
+  41  000000                                 #ENDIF   
+  42                                   
+  43                         
+  44  000000                                 extern   B_FLOOR.b
+  45  000000                                 extern   B_STATUS.b
+  46  000000                                 extern   B_DIRECTION.b
+  47                         
+  48  000000                                 extern   W_CUR_TARGET_PTR.b
+  49  000000                                 extern   W_NEW_PTR.b
+  50                         
+  51  000000                                 extern   FLOOR_TOP.w
+  52  000000                                 extern   FLOOR_BOTTOM.w
+  53                                   
+  54  000000                                 extern   TARGET_QUEUE_BOTTOM.w
+  55                         
+  56                         
+  57  000000                                 extern   TEMP_TARGET_FLOOR_BUTTOM.b
+  58  000000                                 extern   TEMP_TARGET_FLOOR_TOP.b
+  59                         
+  60                                   
+  61                                   
+  62  000000                                 extern   W_TIMER3_HANDLER.b
+  63  000000                                 extern   B_TIMER3_INT_COUNTER.b
+<END_OF_INCLUSION>
+  33                         
+  34  000000                                 #ENDIF   
+  35                         
+  36                         
+  37                         
+  38  000000                                 extern   CheckQueue.w
+  39                         
+  40                         
+  41                         
+  42                         
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 14  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+  43                         
+  44                         
+<END_OF_INCLUSION>
+   4                         
+   5                                   segment  'rom'
+   6  0080E8                                 INTEL    
+   7                         
+   8                         
+   9                         ; ---------------------------------
+  10                         ; name  : void LED_Driver_Init()
+  11                         ; params: 
+  12                         ;
+  13                         ; return: 
+  14                         ; =================================
+  15                         ; void LED_Driver_Init()
+  16                         ; {
+  17                         ; 	...
+  18                         ; }
+  19                         ; ---------------------------------
+  20                         .LED_Driver_Init.w  
+  21  0080E8   8A                            push     cc
+  22                         LED_Driver_Init_start:  
+  23                         
+  24                         LED_Driver_Init_Floor_Keyboard:  
+  25                                                          ;; PB3 - 74HC595(RCLK)
+  26  0080E9   72165005                      bset     PB_ODR,#3
+  27  0080ED   72165007                      bset     PB_DDR, #3
+  28  0080F1   72165008                      bset     PB_CR1, #3
+  29  0080F5   72165009                      bset     PB_CR2, #3
+  30                                   
+  31                                                          ;; PB4 - 74HC595(SRCLK)
+  32  0080F9   72185005                      bset     PB_ODR,#4
+  33  0080FD   72185007                      bset     PB_DDR, #4
+  34  008101   72185008                      bset     PB_CR1, #4
+  35  008105   72185009                      bset     PB_CR2, #4
+  36                         
+  37                                                          ;; PB5 - 74HC595(SER)
+  38  008109   721A5005                      bset     PB_ODR,#5
+  39  00810D   721A5007                      bset     PB_DDR, #5
+  40  008111   721A5008                      bset     PB_CR1, #5
+  41  008115   721A5009                      bset     PB_CR2, #5
+  42                                   
+  43                                   
+  44                         LED_Driver_Init_Counter_Status:  
+  45                                                          ;; PB2 - 74HC595(RCLK)
+  46  008119   72145005                      bset     PB_ODR,#2
+  47  00811D   72145007                      bset     PB_DDR, #2
+  48  008121   72145008                      bset     PB_CR1, #2
+  49  008125   72145009                      bset     PB_CR2, #2
+  50                                   
+  51                                                          ;; PB1 - 74HC595(SRCLK)
+  52  008129   72125005                      bset     PB_ODR,#1
+  53  00812D   72125007                      bset     PB_DDR, #1
+  54  008131   72125008                      bset     PB_CR1, #1
+  55  008135   72125009                      bset     PB_CR2, #1
+  56                         
+  57                                                          ;; PB0 - 74HC595(SER)
+  58  008139   72105005                      bset     PB_ODR,#0
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 15  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+  59  00813D   72105007                      bset     PB_DDR, #0
+  60  008141   72105008                      bset     PB_CR1, #0
+  61  008145   72105009                      bset     PB_CR2, #0
+  62                         
+  63                         LED_Driver_Init_Direction:  
+  64                                                          ;; PE5 - LED_DIR_UP
+  65  008149   721B5014                      bres     PE_ODR,#5
+  66  00814D   721A5016                      bset     PE_DDR, #5
+  67  008151   721A5017                      bset     PE_CR1, #5
+  68  008155   721A5018                      bset     PE_CR2, #5
+  69                         
+  70                                                          ;; PF4 - LED_DIR_DOWN
+  71  008159   72195019                      bres     PF_ODR,#4
+  72  00815D   7218501B                      bset     PF_DDR, #4
+  73  008161   7218501C                      bset     PF_CR1, #4
+  74  008165   7218501D                      bset     PF_CR2, #4
+  75                         
+  76                         
+  77                         
+  78                         LED_Driver_Init_exit:  
+  79  008169   86                            pop      cc
+  80  00816A   81                            ret      
+  81                         
+  82                         
+  83                         
+  84                         
+  85                         
+  86                         ; ---------------------------------
+  87                         ; name  : void LED_Refresh()
+  88                         ; params: 
+  89                         ;
+  90                         ; return: 
+  91                         ; =================================
+  92                         ; void LED_Refresh()
+  93                         ; {
+  94                         ;   ...
+  95                         ; }
+  96                         ; ---------------------------------
+  97                         .LED_Refresh.w  
+  98  00816B   8A                            push     cc
+  99  00816C   88                            push     A
+ 100  00816D   89                            pushw    X
+ 101                         LED_Refresh_start:  
+ 102                         
+ 103                         LED_Refresh_FK:  
+ 104  00816E   CD820C                        call     GetTargetsOneHot_Reverse
+ 105  008171   95                            ld       XH, A
+ 106                         
+ 107  008172   B609                          ld       A, B_FLOOR
+ 108  008174   CD81F8                        call     Floor2OneHot_Reverse
+ 109  008177   97                            ld       XL, A
+ 110  008178   CD822C                        call     SendData2FK
+ 111                         LED_Refresh_CS:  
+ 112  00817B   CD81AF                        call     GetMiscOneHot
+ 113  00817E   95                            ld       XH, A
+ 114                         
+ 115  00817F   CD818D                        call     GetDownCount
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 16  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+ 116                                                          ;cp A, #0
+ 117                                                          ;jreq LED_Refresh_CS_Count
+ 118                                                          ;dec A
+ 119                         LED_Refresh_CS_Count:  
+ 120  008182   CD81EE                        call     GetDpyCode
+ 121  008185   97                            ld       XL, A
+ 122  008186   CD827F                        call     SendData2CS
+ 123                         LED_Refresh_exit:  
+ 124  008189   85                            popw     X
+ 125  00818A   84                            pop      A
+ 126  00818B   86                            pop      cc
+ 127  00818C   81                            ret      
+ 128                         
+ 129                         
+ 130                         
+ 131                         ; ---------------------------------
+ 132                         ; name  : A GetDownCount()
+ 133                         ; params: 
+ 134                         ;
+ 135                         ; return: A: down counter
+ 136                         ; =================================
+ 137                         ; void GetDownCount()
+ 138                         ; {
+ 139                         ;   ...
+ 140                         ; }
+ 141                         ; ---------------------------------
+ 142                         GetDownCount.w  
+ 143  00818D   8A                            push     cc
+ 144                         GetDownCount_start:  
+ 145  00818E   B60A                          ld       A, B_STATUS
+ 146  008190   A103                          cp       A, #3
+ 147  008192   270A                          jreq     GetDownCount_close
+ 148  008194   A102                          cp       A, #2
+ 149  008196   2711                          jreq     GetDownCount_open
+ 150  008198   A101                          cp       A, #1
+ 151  00819A   2709                          jreq     GetDownCount_moving
+ 152  00819C   2003                          jra      GetDownCount_Idle
+ 153                         GetDownCount_close:  
+ 154  00819E   4F                            clr      A
+ 155  00819F   200C                          jra      GetDownCount_exit
+ 156                         GetDownCount_Idle:  
+ 157  0081A1   A610                          ld       A, #10H
+ 158  0081A3   2008                          jra      GetDownCount_exit
+ 159                         GetDownCount_moving:  
+ 160  0081A5   A602                          ld       A, #2    
+ 161  0081A7   2002                          jra      GetDownCount_before_exit
+ 162                         GetDownCount_open:  
+ 163  0081A9   A60A                          ld       A, #10
+ 164                         GetDownCount_before_exit:  
+ 165  0081AB   B012                          sub      A, B_TIMER3_INT_COUNTER
+ 166                         GetDownCount_exit:  
+ 167  0081AD   86                            pop      cc
+ 168  0081AE   81                            ret      
+ 169                         
+ 170                         
+ 171                         
+ 172                         ; ---------------------------------
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 17  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+ 173                         ; name  : A GetMiscOneHot()
+ 174                         ; params: 
+ 175                         ;
+ 176                         ; return: A: misc one hot
+ 177                         ; =================================
+ 178                         ; void GetMiscOneHot()
+ 179                         ; {
+ 180                         ;   ...
+ 181                         ; }
+ 182                         ; ---------------------------------
+ 183                         GetMiscOneHot.w  
+ 184  0081AF   8A                            push     cc
+ 185                         GetMiscOneHot_start:  
+ 186  0081B0   4B00                          push     #0
+ 187                         
+ 188  0081B2   B60A                          ld       A, B_STATUS
+ 189  0081B4   A100                          cp       A, #0
+ 190  0081B6   2608                          jrne     GetDownCount_LED_moving
+ 191                         GetDownCount_LED_idle:  
+ 192  0081B8   B609                          ld       A, B_FLOOR
+ 193  0081BA   A101                          cp       A, #1
+ 194  0081BC   260E                          jrne     GetDownCount_LED_down
+ 195  0081BE   2010                          jra      GetDownCount_LED_door
+ 196                         GetDownCount_LED_moving:  
+ 197  0081C0   B60B                          ld       A, B_DIRECTION
+ 198  0081C2   A101                          cp       A, #00000001B
+ 199  0081C4   2706                          jreq     GetDownCount_LED_down
+ 200                         GetDownCount_LED_up:  
+ 201  0081C6   84                            pop      A
+ 202  0081C7   AA80                          or       A, #10000000B
+ 203  0081C9   88                            push     A
+ 204  0081CA   2004                          jra      GetDownCount_LED_door
+ 205                         GetDownCount_LED_down:  
+ 206  0081CC   84                            pop      A
+ 207  0081CD   AA40                          or       A, #01000000B
+ 208  0081CF   88                            push     A
+ 209                         GetDownCount_LED_door:  
+ 210  0081D0   B60A                          ld       A, B_STATUS
+ 211  0081D2   A102                          cp       A, #2
+ 212  0081D4   2604                          jrne     GetDownCount_misc_end
+ 213  0081D6   84                            pop      A
+ 214  0081D7   AA20                          or       A, #00100000B
+ 215  0081D9   88                            push     A
+ 216                         GetDownCount_misc_end:  
+ 217  0081DA   84                            pop      A
+ 218                         GetMiscOneHot_exit:  
+ 219  0081DB   86                            pop      cc
+ 220  0081DC   81                            ret      
+ 221                         
+ 222                         
+ 223                         
+ 224                         ; ---------------------------------
+ 225                         ; name  : A GetDpyCode(A digital)
+ 226                         ; params: A: digital              => 0 ~ 9
+ 227                         ;
+ 228                         ; return: A: display map
+ 229                         ; =================================
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 18  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+ 230                         ; A GetDpyCode(A digital)
+ 231                         ; {
+ 232                         ;   ...
+ 233                         ; }
+ 234                         ; ---------------------------------
+ 235  0081DD   3F065B4F666D7D07    
+ 235  0081E5   7F6F777C395E7971    DPYCODE   dc.b     3fH,06H,5bH,4fH,66H,6dH,7dH,07H,7fH,6fH,77H,7cH,39H,5eH,79H,71H
+ 236  0081ED   80                            dc.b     80H
+ 237                         
+ 238                         GetDpyCode.w  
+ 239  0081EE   8A                            push     cc
+ 240  0081EF   89                            pushw    X
+ 241                         GetDpyCode_start:  
+ 242  0081F0   5F                            clrw     X
+ 243  0081F1   97                            ld       XL, A
+ 244  0081F2   D681DD                        ld       A, (DPYCODE,X)
+ 245                                   
+ 246                         GetDpyCode_exit:  
+ 247  0081F5   85                            popw     X
+ 248  0081F6   86                            pop      cc
+ 249  0081F7   81                            ret      
+ 250                         
+ 251                         
+ 252                         ; ---------------------------------
+ 253                         ; name  : A Floor2OneHot_Reverse(A floor)
+ 254                         ; params: A: floor              
+ 255                         ;
+ 256                         ; return: A: current floor to one hot
+ 257                         ; =================================
+ 258                         ; A Floor2OneHot_Reverse(A floor)
+ 259                         ; {
+ 260                         ;   ...
+ 261                         ; }
+ 262                         ; ---------------------------------
+ 263                         Floor2OneHot_Reverse.w  
+ 264  0081F8   8A                            push     cc
+ 265  0081F9   89                            pushw    X
+ 266                         Floor2OneHot_start:  
+ 267  0081FA   4A                            dec      A
+ 268  0081FB   2604                          jrne     Floor2OneHot_NOTzero
+ 269                         Floor2OneHot_zero:  
+ 270  0081FD   A680                          ld       A, #10000000B
+ 271  0081FF   2008                          jra      Floor2OneHot_exit
+ 272                         Floor2OneHot_NOTzero:  
+ 273  008201   5F                            clrw     X
+ 274  008202   97                            ld       XL, A
+ 275  008203   A680                          ld       A, #10000000B
+ 276                         Floor2OneHot_loop:  
+ 277  008205   44                            srl      A
+ 278  008206   5A                            decw     X
+ 279  008207   26FC                          jrne     Floor2OneHot_loop
+ 280                         
+ 281                         Floor2OneHot_exit:  
+ 282  008209   85                            popw     X
+ 283  00820A   86                            pop      cc
+ 284  00820B   81                            ret      
+ 285                         
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 19  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+ 286                         
+ 287                         ; ---------------------------------
+ 288                         ; name  : A GetTargetsOneHot_Reverse()
+ 289                         ; params:             
+ 290                         ;
+ 291                         ; return: A: all targets one hot, reverse order
+ 292                         ; =================================
+ 293                         ; A GetTargetsOneHot_Reverse()
+ 294                         ; {
+ 295                         ;   ...
+ 296                         ; }
+ 297                         ; ---------------------------------
+ 298                         GetTargetsOneHot_Reverse.w  
+ 299  00820C   8A                            push     cc
+ 300  00820D   89                            pushw    X
+ 301                         GetTargetsOneHot_start:  
+ 302  00820E   4B00                          push     #0
+ 303                         
+ 304  008210   A608                          ld       A, #8
+ 305  008212   AE0000                        ldw      X, #0
+ 306                         GetTargetsOneHot_loop:  
+ 307  008215   5C                            incw     X
+ 308  008216   88                            push     A
+ 309  008217   CD86AA                        call     CheckQueue
+ 310  00821A   A100                          cp       A, #0
+ 311  00821C   84                            pop      A
+ 312  00821D   2703                          jreq     GetTargetsOneHot_NOTlight
+ 313                         GetTargetsOneHot_light:  
+ 314  00821F   99                            scf      
+ 315  008220   2001                          jra      GetTargetsOneHot_concat
+ 316                         GetTargetsOneHot_NOTlight:  
+ 317  008222   98                            rcf      
+ 318                         GetTargetsOneHot_concat:  
+ 319  008223   0901                          rlc      (1,SP)
+ 320  008225   4A                            dec      A
+ 321  008226   26ED                          jrne     GetTargetsOneHot_loop
+ 322                         
+ 323  008228   84                            pop      A
+ 324                         GetTargetsOneHot_exit:  
+ 325  008229   85                            popw     X
+ 326  00822A   86                            pop      cc
+ 327  00822B   81                            ret      
+ 328                         
+ 329                         
+ 330                         
+ 331                         
+ 332                         ; ---------------------------------
+ 333                         ; name  : void SendData2FK(const X data)    < from high bit to
+                               ; low bit> - [ QH(HIGH) - QA(LOW) ]
+ 334                         ; params: X: data                   => 16 bits
+ 335                         ;
+ 336                         ; return: 
+ 337                         ; =================================
+ 338                         ; void SendData2FK(const X data)
+ 339                         ; {
+ 340                         ; 	...
+ 341                         ; }
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 20  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+ 342                         ; ---------------------------------
+ 343                         SendData2FK.W  
+ 344  00822C   8A                            push     cc
+ 345  00822D   88                            push     A
+ 346  00822E   89                            pushw    X
+ 347                         SendData2FK_start:  
+ 348                         
+ 349  00822F   A610                          ld       A, #16
+ 350                         SendData2FK_loop:  
+ 351  008231   CD82CF                        call     Delay_74HC595
+ 352  008234   CD82CF                        call     Delay_74HC595
+ 353  008237   58                            sllw     X
+ 354  008238   2406                          jrnc     SendData2FK_data_zero
+ 355                         SendData2FK_data_one:  
+ 356  00823A   721A5005                      bset     PB_ODR,#5
+ 357  00823E   2004                          jra      SendData2FK_lock_data
+ 358                         SendData2FK_data_zero:  
+ 359  008240   721B5005                      bres     PB_ODR,#5
+ 360                         SendData2FK_lock_data:  
+ 361  008244   CD82CF                        call     Delay_74HC595
+ 362  008247   CD82CF                        call     Delay_74HC595
+ 363                                                          ;bset LED_FK_SRCLK
+ 364  00824A   72195005                      bres     PB_ODR,#4
+ 365  00824E   CD82CF                        call     Delay_74HC595
+ 366  008251   CD82CF                        call     Delay_74HC595
+ 367                                                          ;bres LED_FK_SRCLK
+ 368  008254   72185005                      bset     PB_ODR,#4
+ 369  008258   CD82CF                        call     Delay_74HC595
+ 370                         
+ 371  00825B   4A                            dec      A
+ 372  00825C   26D3                          jrne     SendData2FK_loop
+ 373                                                          ;bset LED_FK_RCLK
+ 374  00825E   CD82CF                        call     Delay_74HC595
+ 375  008261   CD82CF                        call     Delay_74HC595
+ 376                         SendData2FK_activate_data:  
+ 377  008264   CD82CF                        call     Delay_74HC595
+ 378                                   
+ 379  008267   72175005                      bres     PB_ODR,#3      ; inverter
+ 380  00826B   CD82CF                        call     Delay_74HC595
+ 381                                                          ;bres LED_FK_RCLK
+ 382  00826E   CD82CF                        call     Delay_74HC595
+ 383  008271   CD82CF                        call     Delay_74HC595
+ 384  008274   72165005                      bset     PB_ODR,#3      ; inverter
+ 385  008278   CD82CF                        call     Delay_74HC595
+ 386                                   
+ 387                         SendData2FK_exit:  
+ 388  00827B   85                            popw     X
+ 389  00827C   84                            pop      A
+ 390  00827D   86                            pop      cc
+ 391  00827E   81                            ret      
+ 392                         
+ 393                         
+ 394                         
+ 395                         
+ 396                         
+ 397                         ; ---------------------------------
+ 398                         ; name  : void SendData2CS(const X data)    < from high bit to
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 21  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+                               ; low bit>
+ 399                         ; params: X: data                   => 16 bits
+ 400                         ;
+ 401                         ; return: 
+ 402                         ; =================================
+ 403                         ; void SendData2CS(const X data)
+ 404                         ; {
+ 405                         ;   ...
+ 406                         ; }
+ 407                         ; ---------------------------------
+ 408                         SendData2CS.W  
+ 409  00827F   8A                            push     cc
+ 410  008280   88                            push     A
+ 411  008281   89                            pushw    X
+ 412                         SendData2CS_start:  
+ 413                         
+ 414  008282   A610                          ld       A, #16
+ 415                         SendData2CS_loop:  
+ 416  008284   CD82CF                        call     Delay_74HC595
+ 417  008287   CD82CF                        call     Delay_74HC595
+ 418  00828A   58                            sllw     X
+ 419  00828B   2406                          jrnc     SendData2CS_data_zero
+ 420                         SendData2CS_data_one:  
+ 421  00828D   72105005                      bset     PB_ODR,#0
+ 422  008291   2004                          jra      SendData2CS_lock_data
+ 423                         SendData2CS_data_zero:  
+ 424  008293   72115005                      bres     PB_ODR,#0
+ 425                         SendData2CS_lock_data:  
+ 426                                                          ;bset LED_CS_SRCKL
+ 427  008297   CD82CF                        call     Delay_74HC595
+ 428  00829A   CD82CF                        call     Delay_74HC595
+ 429  00829D   CD82CF                        call     Delay_74HC595
+ 430  0082A0   72135005                      bres     PB_ODR,#1
+ 431  0082A4   CD82CF                        call     Delay_74HC595
+ 432  0082A7   CD82CF                        call     Delay_74HC595
+ 433                                                          ;bres LED_CS_SRCKL
+ 434  0082AA   72125005                      bset     PB_ODR,#1
+ 435                                   
+ 436  0082AE   4A                            dec      A
+ 437  0082AF   26D3                          jrne     SendData2CS_loop
+ 438                                                          ;bset LED_CS_RCLK
+ 439  0082B1   CD82CF                        call     Delay_74HC595
+ 440  0082B4   CD82CF                        call     Delay_74HC595
+ 441                         SendData2CS_activate_data:  
+ 442                         
+ 443  0082B7   72155005                      bres     PB_ODR,#2      ; inverter
+ 444  0082BB   CD82CF                        call     Delay_74HC595
+ 445  0082BE   CD82CF                        call     Delay_74HC595
+ 446                                                          ;bres LED_CS_RCLK
+ 447  0082C1   CD82CF                        call     Delay_74HC595
+ 448  0082C4   72145005                      bset     PB_ODR,#2      ; inverter
+ 449  0082C8   CD82CF                        call     Delay_74HC595
+ 450                                   
+ 451                         SendData2CS_exit:  
+ 452  0082CB   85                            popw     X
+ 453  0082CC   84                            pop      A
+ 454  0082CD   86                            pop      cc
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 22  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+ 455  0082CE   81                            ret      
+ 456                         
+ 457                         
+ 458                         
+ 459                         ;***********************************************************
+ 460                         ;name   : Delay_74HC595()
+ 461                         ;fun    : 
+ 462                         ;params : 
+ 463                         ;         IN  : NULL
+ 464                         ;         OUT : NULL
+ 465                         ;***********************************************************
+ 466                         Delay_74HC595.W  
+ 467  0082CF   9089                          pushw    Y
+ 468  0082D1   90AE0011                      ldw      Y, #011H
+ 469                                   
+ 470                         Delay_74HC595_loop:  
+ 471  0082D5   905A                          decw     Y
+ 472  0082D7   26FC                          jrne     Delay_74HC595_loop
+ 473  0082D9   9085                          popw     Y
+ 474                         
+ 475  0082DB   81                            ret      
+ 476                         
+ 477                         
+ 478                         
+ 479                         
+ 480                         
+ 481                         
+ 482                         
+ 483                         
+ 484                         
+ 485                         
+ 486                         
+ 487  0082DC                                 end      
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 23  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+Symbol Name                       Value     Call       Type  Scope      Rel.  Line  Privacy  Segment   Size  Bytes File
+
+AWU_CSR                               50F0         no  WORD  Internal   ABS    170  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+AWU_APR                               50F1         no  WORD  Internal   ABS    172  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+AWU_TBR                               50F2         no  WORD  Internal   ABS    174  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB0RH                             53E0         no  WORD  Internal   ABS    427  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB0RL                             53E1         no  WORD  Internal   ABS    429  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB1RH                             53E2         no  WORD  Internal   ABS    431  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB1RL                             53E3         no  WORD  Internal   ABS    433  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB2RH                             53E4         no  WORD  Internal   ABS    435  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB2RL                             53E5         no  WORD  Internal   ABS    437  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB3RH                             53E6         no  WORD  Internal   ABS    439  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB3RL                             53E7         no  WORD  Internal   ABS    441  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB4RH                             53E8         no  WORD  Internal   ABS    443  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB4RL                             53E9         no  WORD  Internal   ABS    445  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB5RH                             53EA         no  WORD  Internal   ABS    447  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB5RL                             53EB         no  WORD  Internal   ABS    449  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB6RH                             53EC         no  WORD  Internal   ABS    451  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB6RL                             53ED         no  WORD  Internal   ABS    453  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB7RH                             53EE         no  WORD  Internal   ABS    455  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB7RL                             53EF         no  WORD  Internal   ABS    457  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB8RH                             53F0         no  WORD  Internal   ABS    459  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB8RL                             53F1         no  WORD  Internal   ABS    461  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB9RH                             53F2         no  WORD  Internal   ABS    463  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DB9RL                             53F3         no  WORD  Internal   ABS    465  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_CSR                               5400         no  WORD  Internal   ABS    467  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_CR1                               5401         no  WORD  Internal   ABS    469  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_CR2                               5402         no  WORD  Internal   ABS    471  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_CR3                               5403         no  WORD  Internal   ABS    473  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DRH                               5404         no  WORD  Internal   ABS    475  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_DRL                               5405         no  WORD  Internal   ABS    477  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_TDRH                              5406         no  WORD  Internal   ABS    479  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_TDRL                              5407         no  WORD  Internal   ABS    481  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_HTRH                              5408         no  WORD  Internal   ABS    483  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_HTRL                              5409         no  WORD  Internal   ABS    485  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_LTRH                              540A         no  WORD  Internal   ABS    487  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_LTRL                              540B         no  WORD  Internal   ABS    489  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_AWSRH                             540C         no  WORD  Internal   ABS    491  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_AWSRL                             540D         no  WORD  Internal   ABS    493  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_AWCRH                             540E         no  WORD  Internal   ABS    495  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ADC_AWCRL                             540F         no  WORD  Internal   ABS    497  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+
+BEEP_CSR                              50F3         no  WORD  Internal   ABS    179  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+B_FLOOR                                 09         no  BYTE  Internal   ABS     44  private  textdata     0     0  e:\stm8s\elevator\variable.inc
+B_STATUS                                0A         no  BYTE  Internal   ABS     45  private  textdata     0     0  e:\stm8s\elevator\variable.inc
+B_DIRECTION                             0B         no  BYTE  Internal   ABS     46  private  textdata     0     0  e:\stm8s\elevator\variable.inc
+B_TIMER3_INT_COUNTER                    12         no  BYTE  Internal   ABS     63  private  textdata     0     0  e:\stm8s\elevator\variable.inc
+
+CLK_ICKR                              50C0         no  WORD  Internal   ABS    125  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_ECKR                              50C1         no  WORD  Internal   ABS    127  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_CMSR                              50C3         no  WORD  Internal   ABS    129  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_SWR                               50C4         no  WORD  Internal   ABS    131  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_SWCR                              50C5         no  WORD  Internal   ABS    133  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_CKDIVR                            50C6         no  WORD  Internal   ABS    135  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_PCKENR1                           50C7         no  WORD  Internal   ABS    137  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_CSSR                              50C8         no  WORD  Internal   ABS    139  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_CCOR                              50C9         no  WORD  Internal   ABS    141  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 24  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+CLK_PCKENR2                           50CA         no  WORD  Internal   ABS    143  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_CANCCR                            50CB         no  WORD  Internal   ABS    145  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_HSITRIMR                          50CC         no  WORD  Internal   ABS    147  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CLK_SWIMCCR                           50CD         no  WORD  Internal   ABS    149  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CFG_GCR                               7F60         no  WORD  Internal   ABS    502  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+CheckQueue                            86AA         no  WORD  Internal   ABS     38  private  textdata     0     0  e:\stm8s\elevator\driver\LED.inc
+
+DPYCODE                               81DD         no  WORD  Internal   ABS    235  private  textdata    17     1  -
+Delay_74HC595                         82CF         no  WORD  Internal   ABS    466  private  textdata     6     0  -
+Delay_74HC595_loop                    82D5         no  WORD  Internal   ABS    470  private  textdata     7     0  -
+
+EXTI_CR1                              50A0         no  WORD  Internal   ABS    113  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+EXTI_CR2                              50A1         no  WORD  Internal   ABS    115  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+
+FLASH_CR1                             505A         no  WORD  Internal   ABS     94  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+FLASH_CR2                             505B         no  WORD  Internal   ABS     96  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+FLASH_NCR2                            505C         no  WORD  Internal   ABS     98  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+FLASH_FPR                             505D         no  WORD  Internal   ABS    100  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+FLASH_NFPR                            505E         no  WORD  Internal   ABS    102  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+FLASH_IAPSR                           505F         no  WORD  Internal   ABS    104  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+FLASH_PUKR                            5062         no  WORD  Internal   ABS    106  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+FLASH_DUKR                            5064         no  WORD  Internal   ABS    108  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+FLOOR_TOP                             0108         no  WORD  Internal   ABS     51  private  textdata     0     0  e:\stm8s\elevator\variable.inc
+FLOOR_BOTTOM                          0100         no  WORD  Internal   ABS     52  private  textdata     0     0  e:\stm8s\elevator\variable.inc
+Floor2OneHot_Reverse                  81F8         no  WORD  Internal   ABS    263  private  textdata     2     0  -
+Floor2OneHot_start                    81FA         no  WORD  Internal   ABS    266  private  textdata     3     0  -
+Floor2OneHot_zero                     81FD         no  WORD  Internal   ABS    269  private  textdata     4     0  -
+Floor2OneHot_NOTzero                  8201         no  WORD  Internal   ABS    272  private  textdata     4     0  -
+Floor2OneHot_loop                     8205         no  WORD  Internal   ABS    276  private  textdata     4     0  -
+Floor2OneHot_exit                     8209         no  WORD  Internal   ABS    281  private  textdata     3     0  -
+
+GetDownCount                          818D         no  WORD  Internal   ABS    142  private  textdata     1     0  -
+GetDownCount_start                    818E         no  WORD  Internal   ABS    144  private  textdata    16     0  -
+GetDownCount_close                    819E         no  WORD  Internal   ABS    153  private  textdata     3     0  -
+GetDownCount_Idle                     81A1         no  WORD  Internal   ABS    156  private  textdata     4     0  -
+GetDownCount_moving                   81A5         no  WORD  Internal   ABS    159  private  textdata     4     0  -
+GetDownCount_open                     81A9         no  WORD  Internal   ABS    162  private  textdata     2     0  -
+GetDownCount_before_exit              81AB         no  WORD  Internal   ABS    164  private  textdata     2     0  -
+GetDownCount_exit                     81AD         no  WORD  Internal   ABS    166  private  textdata     2     0  -
+GetMiscOneHot                         81AF         no  WORD  Internal   ABS    183  private  textdata     1     0  -
+GetMiscOneHot_start                   81B0         no  WORD  Internal   ABS    185  private  textdata     8     0  -
+GetDownCount_LED_idle                 81B8         no  WORD  Internal   ABS    191  private  textdata     8     0  -
+GetDownCount_LED_moving               81C0         no  WORD  Internal   ABS    196  private  textdata     6     0  -
+GetDownCount_LED_up                   81C6         no  WORD  Internal   ABS    200  private  textdata     6     0  -
+GetDownCount_LED_down                 81CC         no  WORD  Internal   ABS    205  private  textdata     4     0  -
+GetDownCount_LED_door                 81D0         no  WORD  Internal   ABS    209  private  textdata    10     0  -
+GetDownCount_misc_end                 81DA         no  WORD  Internal   ABS    216  private  textdata     1     0  -
+GetMiscOneHot_exit                    81DB         no  WORD  Internal   ABS    218  private  textdata     2     0  -
+GetDpyCode                            81EE         no  WORD  Internal   ABS    238  private  textdata     2     0  -
+GetDpyCode_start                      81F0         no  WORD  Internal   ABS    241  private  textdata     5     0  -
+GetDpyCode_exit                       81F5         no  WORD  Internal   ABS    246  private  textdata     3     0  -
+GetTargetsOneHot_Reverse              820C         no  WORD  Internal   ABS    298  private  textdata     2     0  -
+GetTargetsOneHot_start                820E         no  WORD  Internal   ABS    301  private  textdata     7     0  -
+GetTargetsOneHot_loop                 8215         no  WORD  Internal   ABS    306  private  textdata    10     0  -
+GetTargetsOneHot_light                821F         no  WORD  Internal   ABS    313  private  textdata     3     0  -
+GetTargetsOneHot_NOTlight             8222         no  WORD  Internal   ABS    316  private  textdata     1     0  -
+GetTargetsOneHot_concat               8223         no  WORD  Internal   ABS    318  private  textdata     6     0  -
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 25  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+GetTargetsOneHot_exit                 8229         no  WORD  Internal   ABS    324  private  textdata     3     0  -
+
+IWDG_KR                               50E0         no  WORD  Internal   ABS    161  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+IWDG_PR                               50E1         no  WORD  Internal   ABS    163  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+IWDG_RLR                              50E2         no  WORD  Internal   ABS    165  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_CR1                               5210         no  WORD  Internal   ABS    203  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_CR2                               5211         no  WORD  Internal   ABS    205  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_FREQR                             5212         no  WORD  Internal   ABS    207  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_OARL                              5213         no  WORD  Internal   ABS    209  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_OARH                              5214         no  WORD  Internal   ABS    211  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_DR                                5216         no  WORD  Internal   ABS    213  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_SR1                               5217         no  WORD  Internal   ABS    215  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_SR2                               5218         no  WORD  Internal   ABS    217  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_SR3                               5219         no  WORD  Internal   ABS    219  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_ITR                               521A         no  WORD  Internal   ABS    221  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_CCRL                              521B         no  WORD  Internal   ABS    223  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_CCRH                              521C         no  WORD  Internal   ABS    225  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_TRISER                            521D         no  WORD  Internal   ABS    227  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+I2C_PECR                              521E         no  WORD  Internal   ABS    229  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ITC_SPR1                              7F70         no  WORD  Internal   ABS    507  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ITC_SPR2                              7F71         no  WORD  Internal   ABS    509  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ITC_SPR3                              7F72         no  WORD  Internal   ABS    511  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ITC_SPR4                              7F73         no  WORD  Internal   ABS    513  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ITC_SPR5                              7F74         no  WORD  Internal   ABS    515  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ITC_SPR6                              7F75         no  WORD  Internal   ABS    517  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+ITC_SPR7                              7F76         no  WORD  Internal   ABS    519  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+
+LED_Driver_Init                       80E8         no  WORD  Internal   ABS     20  public   textdata     1     0  -
+LED_Driver_Init_start                 80E9         no  WORD  Internal   ABS     22  private  textdata    48     0  -
+LED_Driver_Init_Floor_Keyboard        80E9         no  WORD  Internal   ABS     24  private  textdata    48     0  -
+LED_Driver_Init_Counter_Status        8119         no  WORD  Internal   ABS     44  private  textdata    48     0  -
+LED_Driver_Init_Direction             8149         no  WORD  Internal   ABS     63  private  textdata    32     0  -
+LED_Driver_Init_exit                  8169         no  WORD  Internal   ABS     78  private  textdata     2     0  -
+LED_Refresh                           816B         no  WORD  Internal   ABS     97  public   textdata     3     0  -
+LED_Refresh_start                     816E         no  WORD  Internal   ABS    101  private  textdata    13     0  -
+LED_Refresh_FK                        816E         no  WORD  Internal   ABS    103  private  textdata    13     0  -
+LED_Refresh_CS                        817B         no  WORD  Internal   ABS    111  private  textdata     7     0  -
+LED_Refresh_CS_Count                  8182         no  WORD  Internal   ABS    119  private  textdata     7     0  -
+LED_Refresh_exit                      8189         no  WORD  Internal   ABS    123  private  textdata     4     0  -
+
+PA_ODR                                5000         no  WORD  Internal   ABS     16  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PA_IDR                                5001         no  WORD  Internal   ABS     18  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PA_DDR                                5002         no  WORD  Internal   ABS     20  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PA_CR1                                5003         no  WORD  Internal   ABS     22  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PA_CR2                                5004         no  WORD  Internal   ABS     24  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PB_ODR                                5005         no  WORD  Internal   ABS     29  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PB_IDR                                5006         no  WORD  Internal   ABS     31  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PB_DDR                                5007         no  WORD  Internal   ABS     33  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PB_CR1                                5008         no  WORD  Internal   ABS     35  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PB_CR2                                5009         no  WORD  Internal   ABS     37  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PC_ODR                                500A         no  WORD  Internal   ABS     42  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PC_IDR                                500B         no  WORD  Internal   ABS     44  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PC_DDR                                500C         no  WORD  Internal   ABS     46  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PC_CR1                                500D         no  WORD  Internal   ABS     48  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PC_CR2                                500E         no  WORD  Internal   ABS     50  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PD_ODR                                500F         no  WORD  Internal   ABS     55  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PD_IDR                                5010         no  WORD  Internal   ABS     57  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 26  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+PD_DDR                                5011         no  WORD  Internal   ABS     59  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PD_CR1                                5012         no  WORD  Internal   ABS     61  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PD_CR2                                5013         no  WORD  Internal   ABS     63  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PE_ODR                                5014         no  WORD  Internal   ABS     68  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PE_IDR                                5015         no  WORD  Internal   ABS     70  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PE_DDR                                5016         no  WORD  Internal   ABS     72  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PE_CR1                                5017         no  WORD  Internal   ABS     74  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PE_CR2                                5018         no  WORD  Internal   ABS     76  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PF_ODR                                5019         no  WORD  Internal   ABS     81  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PF_IDR                                501A         no  WORD  Internal   ABS     83  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PF_DDR                                501B         no  WORD  Internal   ABS     85  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PF_CR1                                501C         no  WORD  Internal   ABS     87  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+PF_CR2                                501D         no  WORD  Internal   ABS     89  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+
+RST_SR                                50B3         no  WORD  Internal   ABS    120  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+
+SPI_CR1                               5200         no  WORD  Internal   ABS    184  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+SPI_CR2                               5201         no  WORD  Internal   ABS    186  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+SPI_ICR                               5202         no  WORD  Internal   ABS    188  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+SPI_SR                                5203         no  WORD  Internal   ABS    190  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+SPI_DR                                5204         no  WORD  Internal   ABS    192  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+SPI_CRCPR                             5205         no  WORD  Internal   ABS    194  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+SPI_RXCRCR                            5206         no  WORD  Internal   ABS    196  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+SPI_TXCRCR                            5207         no  WORD  Internal   ABS    198  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+SendData2FK                           822C         no  WORD  Internal   ABS    343  private  textdata     3     0  -
+SendData2FK_start                     822F         no  WORD  Internal   ABS    347  private  textdata     2     0  -
+SendData2FK_loop                      8231         no  WORD  Internal   ABS    350  private  textdata     9     0  -
+SendData2FK_data_one                  823A         no  WORD  Internal   ABS    355  private  textdata     6     0  -
+SendData2FK_data_zero                 8240         no  WORD  Internal   ABS    358  private  textdata     4     0  -
+SendData2FK_lock_data                 8244         no  WORD  Internal   ABS    360  private  textdata    32     0  -
+SendData2FK_activate_data             8264         no  WORD  Internal   ABS    376  private  textdata    23     0  -
+SendData2FK_exit                      827B         no  WORD  Internal   ABS    387  private  textdata     4     0  -
+SendData2CS                           827F         no  WORD  Internal   ABS    408  private  textdata     3     0  -
+SendData2CS_start                     8282         no  WORD  Internal   ABS    412  private  textdata     2     0  -
+SendData2CS_loop                      8284         no  WORD  Internal   ABS    415  private  textdata     9     0  -
+SendData2CS_data_one                  828D         no  WORD  Internal   ABS    420  private  textdata     6     0  -
+SendData2CS_data_zero                 8293         no  WORD  Internal   ABS    423  private  textdata     4     0  -
+SendData2CS_lock_data                 8297         no  WORD  Internal   ABS    425  private  textdata    32     0  -
+SendData2CS_activate_data             82B7         no  WORD  Internal   ABS    441  private  textdata    20     0  -
+SendData2CS_exit                      82CB         no  WORD  Internal   ABS    451  private  textdata     4     0  -
+
+TIM1_CR1                              5250         no  WORD  Internal   ABS    261  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CR2                              5251         no  WORD  Internal   ABS    263  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_SMCR                             5252         no  WORD  Internal   ABS    265  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_ETR                              5253         no  WORD  Internal   ABS    267  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_IER                              5254         no  WORD  Internal   ABS    269  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_SR1                              5255         no  WORD  Internal   ABS    271  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_SR2                              5256         no  WORD  Internal   ABS    273  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_EGR                              5257         no  WORD  Internal   ABS    275  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCMR1                            5258         no  WORD  Internal   ABS    277  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCMR2                            5259         no  WORD  Internal   ABS    279  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCMR3                            525A         no  WORD  Internal   ABS    281  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCMR4                            525B         no  WORD  Internal   ABS    283  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCER1                            525C         no  WORD  Internal   ABS    285  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCER2                            525D         no  WORD  Internal   ABS    287  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CNTRH                            525E         no  WORD  Internal   ABS    289  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CNTRL                            525F         no  WORD  Internal   ABS    291  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 27  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+TIM1_PSCRH                            5260         no  WORD  Internal   ABS    293  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_PSCRL                            5261         no  WORD  Internal   ABS    295  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_ARRH                             5262         no  WORD  Internal   ABS    297  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_ARRL                             5263         no  WORD  Internal   ABS    299  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_RCR                              5264         no  WORD  Internal   ABS    301  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCR1H                            5265         no  WORD  Internal   ABS    303  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCR1L                            5266         no  WORD  Internal   ABS    305  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCR2H                            5267         no  WORD  Internal   ABS    307  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCR2L                            5268         no  WORD  Internal   ABS    309  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCR3H                            5269         no  WORD  Internal   ABS    311  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCR3L                            526A         no  WORD  Internal   ABS    313  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCR4H                            526B         no  WORD  Internal   ABS    315  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_CCR4L                            526C         no  WORD  Internal   ABS    317  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_BKR                              526D         no  WORD  Internal   ABS    319  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_DTR                              526E         no  WORD  Internal   ABS    321  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM1_OISR                             526F         no  WORD  Internal   ABS    323  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CR1                              5300         no  WORD  Internal   ABS    328  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_IER                              5301         no  WORD  Internal   ABS    330  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_SR1                              5302         no  WORD  Internal   ABS    332  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_SR2                              5303         no  WORD  Internal   ABS    334  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_EGR                              5304         no  WORD  Internal   ABS    336  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCMR1                            5305         no  WORD  Internal   ABS    338  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCMR2                            5306         no  WORD  Internal   ABS    340  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCMR3                            5307         no  WORD  Internal   ABS    342  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCER1                            5308         no  WORD  Internal   ABS    344  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCER2                            5309         no  WORD  Internal   ABS    346  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CNTRH                            530A         no  WORD  Internal   ABS    348  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CNTRL                            530B         no  WORD  Internal   ABS    350  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_PSCR                             530C         no  WORD  Internal   ABS    352  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_ARRH                             530D         no  WORD  Internal   ABS    354  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_ARRL                             530E         no  WORD  Internal   ABS    356  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCR1H                            530F         no  WORD  Internal   ABS    358  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCR1L                            5310         no  WORD  Internal   ABS    360  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCR2H                            5311         no  WORD  Internal   ABS    362  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCR2L                            5312         no  WORD  Internal   ABS    364  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCR3H                            5313         no  WORD  Internal   ABS    366  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM2_CCR3L                            5314         no  WORD  Internal   ABS    368  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CR1                              5320         no  WORD  Internal   ABS    373  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_IER                              5321         no  WORD  Internal   ABS    375  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_SR1                              5322         no  WORD  Internal   ABS    377  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_SR2                              5323         no  WORD  Internal   ABS    379  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_EGR                              5324         no  WORD  Internal   ABS    381  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CCMR1                            5325         no  WORD  Internal   ABS    383  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CCMR2                            5326         no  WORD  Internal   ABS    385  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CCER1                            5327         no  WORD  Internal   ABS    387  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CNTRH                            5328         no  WORD  Internal   ABS    389  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CNTRL                            5329         no  WORD  Internal   ABS    391  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_PSCR                             532A         no  WORD  Internal   ABS    393  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_ARRH                             532B         no  WORD  Internal   ABS    395  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_ARRL                             532C         no  WORD  Internal   ABS    397  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CCR1H                            532D         no  WORD  Internal   ABS    399  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CCR1L                            532E         no  WORD  Internal   ABS    401  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CCR2H                            532F         no  WORD  Internal   ABS    403  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM3_CCR2L                            5330         no  WORD  Internal   ABS    405  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM4_CR1                              5340         no  WORD  Internal   ABS    410  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM4_IER                              5341         no  WORD  Internal   ABS    412  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM4_SR                               5342         no  WORD  Internal   ABS    414  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+STMicroelectronics list file postprocessor v1.01   (C)2009-2019   Wed Jun 19 15:36:21 2019
+Page 28  Assembler
+                                               e:\stm8s\elevator\driver\led.asm
+
+TIM4_EGR                              5343         no  WORD  Internal   ABS    416  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM4_CNTR                             5344         no  WORD  Internal   ABS    418  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM4_PSCR                             5345         no  WORD  Internal   ABS    420  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TIM4_ARR                              5346         no  WORD  Internal   ABS    422  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+TARGET_QUEUE_BOTTOM                   0108         no  WORD  Internal   ABS     54  private  textdata     0     0  e:\stm8s\elevator\variable.inc
+TEMP_TARGET_FLOOR_BUTTOM                13         no  BYTE  Internal   ABS     57  private  textdata     0     0  e:\stm8s\elevator\variable.inc
+TEMP_TARGET_FLOOR_TOP                   1B         no  BYTE  Internal   ABS     58  private  textdata     0     0  e:\stm8s\elevator\variable.inc
+
+UART2_SR                              5240         no  WORD  Internal   ABS    234  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_DR                              5241         no  WORD  Internal   ABS    236  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_BRR1                            5242         no  WORD  Internal   ABS    238  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_BRR2                            5243         no  WORD  Internal   ABS    240  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_CR1                             5244         no  WORD  Internal   ABS    242  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_CR2                             5245         no  WORD  Internal   ABS    244  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_CR3                             5246         no  WORD  Internal   ABS    246  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_CR4                             5247         no  WORD  Internal   ABS    248  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_CR5                             5248         no  WORD  Internal   ABS    250  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_CR6                             5249         no  WORD  Internal   ABS    252  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_GTR                             524A         no  WORD  Internal   ABS    254  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+UART2_PSCR                            524B         no  WORD  Internal   ABS    256  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+
+WWDG_CR                               50D1         no  WORD  Internal   ABS    154  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+WWDG_WR                               50D2         no  WORD  Internal   ABS    156  private  textdata     0     0  c:\program files (x86)\stmicroelectronics\st_toolset\asm\include\STM8S105K.inc
+W_CUR_TARGET_PTR                        0C         no  BYTE  Internal   ABS     48  private  textdata     0     0  e:\stm8s\elevator\variable.inc
+W_NEW_PTR                               0E         no  BYTE  Internal   ABS     49  private  textdata     0     0  e:\stm8s\elevator\variable.inc
+W_TIMER3_HANDLER                        10         no  BYTE  Internal   ABS     62  private  textdata     0     0  e:\stm8s\elevator\variable.inc
+
+
+295 labels
+No errors on assembly of 'e:\stm8s\elevator\driver\led.asm'
